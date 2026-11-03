@@ -1,0 +1,266 @@
+{
+  "titre": "Sölden 2027",
+  "sousTitre": "Voyage de ski en groupe",
+  "debut": "2027-03-05",
+  "fin": "2027-03-13",
+  "niveau": "Intermédiaire",
+  "accompagnateur": {
+    "nom": "Mathieu",
+    "role": "Votre accompagnateur",
+    "courriel": ""
+  },
+  "annonces": [
+    {
+      "date": "2026-11-03T07:00",
+      "fuseau": "America/Toronto",
+      "texte": "Bienvenue dans l’app du voyage! Installez-la sur votre écran d’accueil (Partager › Sur l’écran d’accueil). Le programme et les annonces se mettront à jour ici jusqu’au départ."
+    }
+  ],
+  "programme": [
+    {
+      "date": "2027-03-05",
+      "fuseau": "America/Toronto",
+      "titre": "Départ de Montréal",
+      "items": [
+        {
+          "heure": "14:45",
+          "titre": "Rendez-vous à la porte d’embarquement",
+          "lieu": "Aéroport Montréal-Trudeau (YUL)",
+          "note": "Rendez-vous 2 h avant le départ. Prévoyez d’arriver à l’aéroport assez tôt pour l’enregistrement des bagages et la sécurité.",
+          "rdv": true
+        },
+        {
+          "heure": "16:45",
+          "titre": "Vol Montréal → Zurich",
+          "lieu": "Swiss · YUL → ZRH",
+          "note": "Vol de nuit. Gardez dans votre bagage à main : passeport, médicaments, chargeur et une tenue de rechange."
+        }
+      ]
+    },
+    {
+      "date": "2027-03-06",
+      "fuseau": "Europe/Vienna",
+      "titre": "Arrivée et bienvenue",
+      "items": [
+        {
+          "heure": "",
+          "titre": "Arrivée à Zurich",
+          "lieu": "Aéroport de Zurich (ZRH)",
+          "note": "Heure d’arrivée et point de rencontre à confirmer.",
+          "aConfirmer": true
+        },
+        {
+          "heure": "",
+          "titre": "Transfert vers Sölden",
+          "lieu": "Zurich → Sölden",
+          "note": "Détails du transfert à confirmer.",
+          "aConfirmer": true
+        },
+        {
+          "heure": "",
+          "titre": "Installation à l’hôtel",
+          "lieu": "Hotel Bäckelar Wirt",
+          "note": "Arrivée à l’hôtel à partir de 14 h selon la fiche de l’hôtel.",
+          "aConfirmer": true
+        },
+        {
+          "heure": "18:00",
+          "titre": "Cocktail de bienvenue",
+          "lieu": "Bar de l’hôtel Bäckelar Wirt",
+          "note": "Présentation du programme de la semaine et remise des infos ski.",
+          "rdv": true
+        }
+      ]
+    },
+    {
+      "date": "2027-03-07",
+      "fuseau": "Europe/Vienna",
+      "titre": "Ski",
+      "items": [
+        {
+          "heure": "",
+          "titre": "Journée de ski",
+          "lieu": "Domaine de Sölden",
+          "note": "Programme de la journée à venir.",
+          "aConfirmer": true
+        }
+      ]
+    },
+    {
+      "date": "2027-03-08",
+      "fuseau": "Europe/Vienna",
+      "titre": "Ski",
+      "items": [
+        {
+          "heure": "",
+          "titre": "Journée de ski",
+          "lieu": "Domaine de Sölden",
+          "note": "Programme de la journée à venir.",
+          "aConfirmer": true
+        }
+      ]
+    },
+    {
+      "date": "2027-03-09",
+      "fuseau": "Europe/Vienna",
+      "titre": "Ski",
+      "items": [
+        {
+          "heure": "",
+          "titre": "Journée de ski",
+          "lieu": "Domaine de Sölden",
+          "note": "Programme de la journée à venir.",
+          "aConfirmer": true
+        }
+      ]
+    },
+    {
+      "date": "2027-03-10",
+      "fuseau": "Europe/Vienna",
+      "titre": "Ski",
+      "items": [
+        {
+          "heure": "",
+          "titre": "Journée de ski",
+          "lieu": "Domaine de Sölden",
+          "note": "Programme de la journée à venir.",
+          "aConfirmer": true
+        }
+      ]
+    },
+    {
+      "date": "2027-03-11",
+      "fuseau": "Europe/Vienna",
+      "titre": "Ski",
+      "items": [
+        {
+          "heure": "",
+          "titre": "Journée de ski",
+          "lieu": "Domaine de Sölden",
+          "note": "Programme de la journée à venir.",
+          "aConfirmer": true
+        }
+      ]
+    },
+    {
+      "date": "2027-03-12",
+      "fuseau": "Europe/Vienna",
+      "titre": "Ski",
+      "items": [
+        {
+          "heure": "",
+          "titre": "Journée de ski",
+          "lieu": "Domaine de Sölden",
+          "note": "Dernière journée sur les pistes. Programme à venir.",
+          "aConfirmer": true
+        }
+      ]
+    },
+    {
+      "date": "2027-03-13",
+      "fuseau": "Europe/Vienna",
+      "titre": "Retour",
+      "items": [
+        {
+          "heure": "",
+          "titre": "Départ de l’hôtel",
+          "lieu": "Hotel Bäckelar Wirt",
+          "note": "Libération des chambres avant 10 h selon la fiche de l’hôtel. Heure de départ du transfert à confirmer.",
+          "aConfirmer": true
+        },
+        {
+          "heure": "",
+          "titre": "Vol de retour vers Montréal",
+          "lieu": "Zurich → Montréal",
+          "note": "Horaire à confirmer.",
+          "aConfirmer": true
+        }
+      ]
+    }
+  ],
+  "lieux": [
+    {
+      "id": "hotel",
+      "nom": "Hotel Bäckelar Wirt",
+      "detail": "Dorfstraße 125, 6450 Sölden",
+      "lat": 46.95866,
+      "lng": 11.00943
+    }
+  ],
+  "hotel": {
+    "nom": "Hotel Bäckelar Wirt",
+    "adresse": "Dorfstraße 125, 6450 Sölden, Autriche",
+    "points": [
+      "À côté de la gare aval de la télécabine Gaislachkogl; la piste se termine à environ 80 m de l’hôtel.",
+      "Arrêt de ski-bus juste devant l’hôtel.",
+      "Local à skis avec sèche-chaussures.",
+      "Sauna, bain de vapeur et cabine infrarouge.",
+      "Arrivée de 14 h à 21 h · départ avant 10 h (fiche de l’hôtel, à confirmer pour le groupe)."
+    ]
+  },
+  "infosSki": [
+    "Niveau du groupe : intermédiaire. Les suggestions privilégient les pistes bleues et quelques rouges.",
+    "Forfait, location de skis et cours : les détails seront donnés au cocktail de bienvenue.",
+    "Avant chaque journée, consultez l’onglet Ski pour voir les remontées et pistes ouvertes."
+  ],
+  "organisateur": {
+    "nom": "Gendron Ski",
+    "site": "https://www.voyagesgendron.com/ski/"
+  },
+  "liens": [
+    {
+      "type": "whatsapp",
+      "titre": "Groupe WhatsApp du voyage",
+      "url": ""
+    },
+    {
+      "type": "facebook",
+      "titre": "Groupe Facebook du voyage",
+      "url": ""
+    },
+    {
+      "type": "site",
+      "titre": "Gendron Ski",
+      "url": "https://www.voyagesgendron.com/ski/"
+    }
+  ],
+  "meteo": {
+    "points": [
+      {
+        "domaine": "soelden",
+        "nom": "Village",
+        "lat": 46.9655,
+        "lng": 11.0076,
+        "altitude": 1370
+      },
+      {
+        "domaine": "soelden",
+        "nom": "Mi-station",
+        "lat": 46.95,
+        "lng": 10.986,
+        "altitude": 2174
+      },
+      {
+        "domaine": "soelden",
+        "nom": "Sommets",
+        "lat": 46.937,
+        "lng": 10.965,
+        "altitude": 3040
+      },
+      {
+        "domaine": "gurgl",
+        "nom": "Village",
+        "lat": 46.8705,
+        "lng": 11.0272,
+        "altitude": 1910
+      },
+      {
+        "domaine": "gurgl",
+        "nom": "Sommets",
+        "lat": 46.8807,
+        "lng": 11.0858,
+        "altitude": 3000
+      }
+    ]
+  }
+}

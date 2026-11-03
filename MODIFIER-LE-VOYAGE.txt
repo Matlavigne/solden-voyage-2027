@@ -1,0 +1,65 @@
+MODIFIER L'APP DU VOYAGE — sans rien reconstruire
+====================================================
+
+Tout ce qui change pendant le voyage est dans UN fichier : voyage.json
+Les voyageurs voient la nouvelle version à la prochaine ouverture de l'app (avec réseau).
+
+MODIFIER DEPUIS LE TÉLÉPHONE OU L'ORDINATEUR
+  1. github.com → votre dépôt → cliquez voyage.json
+  2. Icône crayon (Edit this file)
+  3. Faites la modification, puis « Commit changes »
+  4. Attendez 1 à 2 min, puis vérifiez avec l'adresse de l'app suivie de ?verif
+     ex. https://VOTRE-COMPTE.github.io/solden-voyage-2027/?verif
+     → bandeau vert = fichier valide · bandeau rouge = erreur de syntaxe (l'app garde l'ancienne version)
+
+LIENS DU GROUPE (dans "liens") — WhatsApp, Facebook, etc.
+  Collez le lien d'invitation entre les guillemets de "url" :
+    { "type": "whatsapp", "titre": "Groupe WhatsApp du voyage", "url": "https://chat.whatsapp.com/XXXXXXXX" },
+    { "type": "facebook", "titre": "Groupe Facebook du voyage", "url": "https://www.facebook.com/groups/XXXXXXXX" },
+  - Un lien avec "url": "" reste caché. Dès qu'il est rempli, il apparaît sur l'Accueil
+    (« Rejoindre le groupe ») et dans l'onglet Infos.
+  - Types possibles : whatsapp, facebook, instagram, site, autre
+  - On peut en ajouter d'autres (ex. album photo partagé) :
+    { "type": "autre", "titre": "Album photo", "detail": "Déposez vos photos ici", "url": "https://..." }
+  Où trouver les liens :
+    WhatsApp : ouvrir le groupe › nom du groupe › Inviter via un lien › Copier le lien
+    Facebook : ouvrir le groupe › Partager › Copier le lien
+
+AJOUTER UNE ANNONCE (dans "annonces")
+    {
+      "date": "2027-03-08T07:30",
+      "fuseau": "Europe/Vienna",
+      "texte": "Rendez-vous déplacé à 9 h 15 au pied du Gaislachkogl."
+    },
+  - "date" : l'annonce n'apparaît qu'à partir de cette heure → on peut les préparer d'avance.
+  - "fuseau" : "Europe/Vienna" en Autriche, "America/Toronto" pour l'heure de Montréal.
+
+AJOUTER UN RENDEZ-VOUS AU PROGRAMME (dans "items" du bon jour)
+    { "heure": "09:00", "titre": "Départ ski en groupe", "lieu": "Gare aval Gaislachkogl", "note": "Forfait en main.", "rdv": true }
+  - "rdv": true → étiquette « Rendez-vous » et compte à rebours sur l'accueil
+  - "aConfirmer": true → étiquette « À confirmer » (retirez-la quand c'est confirmé)
+  - "heure": "" → élément sans heure
+
+AJOUTER UN LIEU SUR LA CARTE (dans "lieux")
+    { "id": "rdv1", "nom": "Point de rencontre", "detail": "Devant la billetterie", "lat": 46.9600, "lng": 11.0060 }
+  Coordonnées : appui long sur le lieu dans Google Maps ou Plans → copier les deux nombres.
+
+POINTS MÉTÉO (dans "meteo" › "points")
+    { "domaine": "soelden", "nom": "Mi-station", "lat": 46.950, "lng": 10.986, "altitude": 2174 },
+  - "domaine" : "soelden" ou "gurgl" → le point s'affiche selon le domaine choisi (Sölden, Gurgl, Les deux).
+  - "altitude" en mètres règle la prévision; les coordonnées peuvent être approximatives.
+  - Pour un autre voyage, remplacez par les points de la nouvelle station.
+
+RÈGLES JSON À RESPECTER
+  - Texte toujours entre guillemets droits "…"
+  - Virgule entre deux éléments, jamais après le dernier d'une liste
+  - Pas de guillemet " à l'intérieur d'un texte : utilisez « » ou ’
+
+CONFIDENTIALITÉ
+  L'adresse de l'app est publique : aucun nom de voyageur, numéro de chambre,
+  de téléphone personnel ou de réservation dans voyage.json.
+  Un lien d'invitation WhatsApp/Facebook permet à quiconque l'a de demander à rejoindre :
+  activez l'approbation des membres dans les réglages du groupe.
+
+APERÇU D'UNE DATE (pour tester)
+  Ajoutez ?apercu=2027-03-07T08:00 à l'adresse pour voir l'app comme ce jour-là (heure d'Autriche).

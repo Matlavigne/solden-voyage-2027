@@ -1,0 +1,28 @@
+Sölden 2027 · Voyage de ski — PWA générée le 2026-11-03
+============================================
+
+CONTENU DU DOSSIER
+  index.html, manifest.webmanifest, sw.js, icônes PNG.
+  Publiez TOUT le dossier tel quel, sans renommer les fichiers.
+
+PUBLIER (GitHub Pages, gratuit)
+  1. github.com → New repository → nom : solden-2027-voyage-de-ski → Public → Create.
+  2. « uploading an existing file » → glissez tout le contenu du dossier → Commit.
+  3. Settings → Pages → Source : Deploy from a branch → main / (root) → Save.
+  4. Après 1 à 2 min, l'adresse est : https://VOTRE-COMPTE.github.io/solden-2027-voyage-de-ski/
+
+INSTALLER SUR IPHONE
+  Safari → ouvrir l'adresse → bouton Partager → « Sur l'écran d'accueil » → Ajouter.
+  Ouvrez l'app une fois avec du réseau pour qu'elle se mette en cache.
+
+METTRE À JOUR
+  Relancez html2pwa.py sur le nouveau HTML (le numéro de cache change tout seul),
+  puis remplacez les fichiers sur GitHub. Sur l'iPhone, fermez et rouvrez l'app.
+
+LIMITES
+  - Hors ligne : la page, ses données et ses images locales fonctionnent.
+    Les cartes en iframe, API et sites externes demandent du réseau.
+    Les images externes sont gardées en cache seulement après un premier affichage.
+  - Ouvrir index.html directement depuis le disque ne donne pas le mode hors ligne :
+    il faut une adresse https.
+  - Les données enregistrées (favoris, préférences) restent propres à chaque appareil.
