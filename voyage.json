@@ -1,5 +1,6 @@
 {
-  "titre": "Sölden 2027",
+  "titre": "Gendronski Sölden",
+  "datesTexte": "5 au 13 mars 2027",
   "sousTitre": "Voyage de ski en groupe",
   "debut": "2027-03-05",
   "fin": "2027-03-13",
@@ -228,7 +229,7 @@
         "d": "Vêtements et effets personnels"
       }
     ],
-    "noteSoute": "Le sac à skis et le sac à bottes sont en plus du bagage de 23 kg et sont aussi soumis a la règle du 23 kg pour le sac a ski et bottes combinés.",
+    "noteSoute": "Le sac à skis et le sac à bottes sont en plus du bagage de 23 kg. Ensemble, ils ne doivent pas dépasser 23 kg.",
     "cabine": [
       {
         "t": "1 bagage à main",

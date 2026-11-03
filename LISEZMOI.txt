@@ -1,4 +1,4 @@
-Sölden 2027 · Voyage de ski — PWA générée le 2026-11-03
+Gendronski Sölden 2027 — PWA générée le 2026-11-03
 ============================================
 
 CONTENU DU DOSSIER
@@ -6,10 +6,10 @@ CONTENU DU DOSSIER
   Publiez TOUT le dossier tel quel, sans renommer les fichiers.
 
 PUBLIER (GitHub Pages, gratuit)
-  1. github.com → New repository → nom : solden-2027-voyage-de-ski → Public → Create.
+  1. github.com → New repository → nom : gendronski-solden-2027 → Public → Create.
   2. « uploading an existing file » → glissez tout le contenu du dossier → Commit.
   3. Settings → Pages → Source : Deploy from a branch → main / (root) → Save.
-  4. Après 1 à 2 min, l'adresse est : https://VOTRE-COMPTE.github.io/solden-2027-voyage-de-ski/
+  4. Après 1 à 2 min, l'adresse est : https://VOTRE-COMPTE.github.io/gendronski-solden-2027/
 
 INSTALLER SUR IPHONE
   Safari → ouvrir l'adresse → bouton Partager → « Sur l'écran d'accueil » → Ajouter.

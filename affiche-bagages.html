@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bagages pour l’avion · Sölden 2027</title>
+<title>Bagages pour l’avion · Gendronski Sölden</title>
 <meta name="theme-color" content="#13509f">
 <link rel="icon" type="image/png" href="icon-192.png">
 <style>
@@ -45,7 +45,7 @@ h1{margin:0;font-size:38px;line-height:1.05;letter-spacing:-1px}
 <main class="sheet">
   <div class="top">
     <div><p class="over">Voyage de ski en groupe</p><h1>Qu’est-ce qu’on apporte<br>dans l’avion?</h1></div>
-    <div class="trip"><b id="t-titre">Sölden 2027</b><span id="t-dates">5 au 13 mars 2027</span></div>
+    <div class="trip"><b id="t-titre">Gendronski Sölden</b><span id="t-dates">5 au 13 mars 2027</span></div>
   </div>
 
   <div class="cols">
@@ -76,7 +76,7 @@ h1{margin:0;font-size:38px;line-height:1.05;letter-spacing:-1px}
   <div class="foot"><span>Voyage organisé par Gendron Ski</span><span id="f-url"></span></div>
 </main>
 
-<script id="defaut" type="application/json">{"titre": "Sölden 2027", "bagages": {"soute": [{"t": "Sac à skis", "d": "Skis et bâtons"}, {"t": "Sac à bottes", "d": "Bottes de ski"}, {"t": "1 bagage de 23 kg", "d": "Vêtements et effets personnels"}], "noteSoute": "Le sac à skis et le sac à bottes sont en plus du bagage de 23 kg.", "cabine": [{"t": "1 bagage à main", "d": "Format cabine, dans le compartiment au-dessus du siège"}, {"t": "1 sac personnel", "d": "Sac à dos ou sac à main, sous le siège devant vous"}], "important": "Très important : les batteries externes et les batteries au lithium voyagent avec vous en cabine, jamais en soute.", "conseils": ["Gardez dans votre bagage à main : passeport, médicaments, chargeur et une tenue de rechange.", "Mettez une étiquette à votre nom sur chaque sac."]}}</script>
+<script id="defaut" type="application/json">{"titre": "Gendronski Sölden", "sousDates": "5 au 13 mars 2027", "bagages": {"soute": [{"t": "Sac à skis", "d": "Skis et bâtons"}, {"t": "Sac à bottes", "d": "Bottes de ski et casque de ski"}, {"t": "1 bagage de 23 kg", "d": "Vêtements et effets personnels"}], "noteSoute": "Le sac à skis et le sac à bottes sont en plus du bagage de 23 kg. Ensemble, ils ne doivent pas dépasser 23 kg.", "cabine": [{"t": "1 bagage à main", "d": "Format cabine, dans le compartiment au-dessus du siège"}, {"t": "1 sac personnel", "d": "Sac à dos ou sac à main, sous le siège devant vous"}], "important": "Très important : les batteries externes et les batteries au lithium voyagent avec vous en cabine, jamais en soute.", "conseils": ["Gardez dans votre bagage à main : passeport, médicaments, chargeur et vos batteries.", "Mettez une étiquette à votre nom sur chaque sac."]}}</script>
 <script>
 (function(){
   var ICONS={
@@ -96,7 +96,7 @@ h1{margin:0;font-size:38px;line-height:1.05;letter-spacing:-1px}
     if(b.important){var im=b.important.replace(/^Très important\s*:\s*/i,'');document.getElementById('important').textContent=im.charAt(0).toUpperCase()+im.slice(1);}
     document.getElementById('tips').innerHTML=(b.conseils||[]).map(function(c){return'<li>'+esc(c)+'</li>';}).join('');
     if(v.titre)document.getElementById('t-titre').textContent=v.titre;
-    if(v.sousDates)document.getElementById('t-dates').textContent=v.sousDates;
+    if(v.sousDates||v.datesTexte)document.getElementById('t-dates').textContent=v.sousDates||v.datesTexte;
   }
   render(JSON.parse(document.getElementById('defaut').textContent));
   if(location.protocol!=='file:'){

@@ -1,6 +1,6 @@
 // Service worker généré par html2pwa.py
 // Changez CACHE à chaque mise à jour pour forcer l'actualisation chez les utilisateurs.
-const CACHE = 'solden-2027-voyage-de-ski-3379cf7c';
+const CACHE = 'gendronski-solden-2027-f33fbd0e';
 const CORE = ['./', 'index.html', 'manifest.webmanifest',
               'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png',
               'voyage.json', 'hero.webp', 'installer.html', 'affiche-bagages.html', 'og.jpg'];
@@ -11,7 +11,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k.startsWith('solden-2027-voyage-de-ski-') && k !== CACHE).map(k => caches.delete(k))))
+    .then(keys => Promise.all(keys.filter(k => k.startsWith('gendronski-solden-2027-') && k !== CACHE).map(k => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
 
