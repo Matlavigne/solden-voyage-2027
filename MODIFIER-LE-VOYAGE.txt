@@ -40,6 +40,22 @@ AJOUTER UN RENDEZ-VOUS AU PROGRAMME (dans "items" du bon jour)
   - "aConfirmer": true → étiquette « À confirmer » (retirez-la quand c'est confirmé)
   - "heure": "" → élément sans heure
 
+RÉUNION TEAMS ET AUTRES RENCONTRES AVANT LE DÉPART (dans "avantDepart")
+    { "date": "2027-02-19", "fuseau": "America/Toronto", "heure": "19:00", "titre": "Réunion d’information sur Teams",
+      "lieu": "En ligne · Microsoft Teams", "note": "…", "lien": "https://teams.microsoft.com/…", "lienTexte": "Rejoindre la réunion Teams", "rdv": true }
+  - Avec une "heure", la réunion devient le « Prochain rendez-vous » sur l'Accueil et entre dans le calendrier.
+  - "lien" vide = pas de bouton. L'app est publique : activez la salle d'attente Teams, ou laissez le lien vide
+    et envoyez-le dans le groupe WhatsApp.
+  - Retirez "aConfirmer": true quand la date est confirmée.
+
+BAGAGES (dans "bagages") — sert à l'app ET à l'affiche affiche-bagages.html
+  "soute" et "cabine" : une ligne par sac { "t": "Sac à skis", "d": "Skis et bâtons" }
+  "noteSoute", "important" (encadré rouge), "conseils" (petites lignes en bas de l'affiche)
+  La carte « Vos bagages pour l'avion » apparaît sur l'Accueil les 3 semaines avant le départ.
+
+DOCUMENTS (dans "documents")
+  "liste" : cases à cocher pour chaque voyageur · "notes" : petites phrases sous la liste
+
 AJOUTER UN LIEU SUR LA CARTE (dans "lieux")
     { "id": "rdv1", "nom": "Point de rencontre", "detail": "Devant la billetterie", "lat": 46.9600, "lng": 11.0060 }
   Coordonnées : appui long sur le lieu dans Google Maps ou Plans → copier les deux nombres.

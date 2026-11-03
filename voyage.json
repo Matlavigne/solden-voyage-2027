@@ -16,6 +16,20 @@
       "texte": "Bienvenue dans l’app du voyage! Installez-la sur votre écran d’accueil (Partager › Sur l’écran d’accueil). Le programme et les annonces se mettront à jour ici jusqu’au départ."
     }
   ],
+  "avantDepart": [
+    {
+      "date": "2027-02-19",
+      "fuseau": "America/Toronto",
+      "heure": "",
+      "titre": "Réunion d’information sur Teams",
+      "lieu": "En ligne · Microsoft Teams",
+      "note": "Infos générales sur le voyage et réponses à vos questions. Date et heure à confirmer; le lien de la réunion sera envoyé dans le groupe WhatsApp.",
+      "lien": "",
+      "lienTexte": "Rejoindre la réunion Teams",
+      "rdv": true,
+      "aConfirmer": true
+    }
+  ],
   "programme": [
     {
       "date": "2027-03-05",
@@ -26,7 +40,7 @@
           "heure": "14:45",
           "titre": "Rendez-vous à la porte d’embarquement",
           "lieu": "Aéroport Montréal-Trudeau (YUL)",
-          "note": "Rendez-vous 2 h avant le départ. Prévoyez d’arriver à l’aéroport assez tôt pour l’enregistrement des bagages et la sécurité, je vous y attendrai avec une affiche GENDRONSKI.",
+          "note": "Rendez-vous 2 h avant le départ. Prévoyez d’arriver à l’aéroport assez tôt pour l’enregistrement des bagages et la sécurité. Je vous y attendrai avec une affiche GENDRONSKI.",
           "rdv": true
         },
         {
@@ -43,31 +57,32 @@
       "titre": "Arrivée et bienvenue",
       "items": [
         {
-          "heure": "",
+          "heure": "06:15",
           "titre": "Arrivée à Zurich",
           "lieu": "Aéroport de Zurich (ZRH)",
-          "note": "Arrivée vers 6:15, point de rencontre au carousel de baggages avant de sortir de l'aérogare.",
-          "aConfirmer": false
+          "note": "Arrivée vers 6 h 15. Point de rencontre au carrousel à bagages, avant de sortir de l’aérogare.",
+          "aConfirmer": false,
+          "rdv": true
         },
         {
           "heure": "",
           "titre": "Transfert vers Sölden",
           "lieu": "Zurich → Sölden",
-          "note": "Transfert en autobus vers Solden.",
+          "note": "Transfert en autocar vers Sölden.",
           "aConfirmer": false
         },
         {
-          "heure": "",
+          "heure": "12:00",
           "titre": "Installation à l’hôtel",
           "lieu": "Hotel Bäckelar Wirt",
-          "note": "Arrivée à l’hôtel vers 12:00.",
+          "note": "Arrivée à l’hôtel vers 12 h.",
           "aConfirmer": false
         },
         {
           "heure": "18:00",
           "titre": "Cocktail de bienvenue",
           "lieu": "Bar de l’hôtel Bäckelar Wirt",
-          "note": "Présentation du programme de la semaine et remise des passe de ski.",
+          "note": "Présentation du programme de la semaine et remise des forfaits de ski.",
           "rdv": true
         }
       ]
@@ -151,7 +166,7 @@
           "heure": "",
           "titre": "Journée de ski",
           "lieu": "Domaine de Sölden",
-          "note": "Dernière journée sur les pistes. Retirer les skie et bottes du skiroom avant 18:00. Programme à venir.",
+          "note": "Dernière journée sur les pistes. Récupérez vos skis et vos bottes au local à skis avant 18 h. Programme à venir.",
           "aConfirmer": true
         }
       ]
@@ -162,10 +177,10 @@
       "titre": "Retour",
       "items": [
         {
-          "heure": "",
+          "heure": "05:30",
           "titre": "Départ de l’hôtel",
           "lieu": "Hotel Bäckelar Wirt",
-          "note": "Libération des chambres avant 5:30 h. Heure de départ du transfert à confirmer.",
+          "note": "Libération des chambres avant 5 h 30. Heure de départ du transfert à confirmer.",
           "aConfirmer": true
         },
         {
@@ -198,6 +213,49 @@
       "Arrivée de 14 h à 21 h · départ avant 10 h (fiche de l’hôtel, à confirmer pour le groupe)."
     ]
   },
+  "bagages": {
+    "soute": [
+      {
+        "t": "Sac à skis",
+        "d": "Skis et bâtons"
+      },
+      {
+        "t": "Sac à bottes",
+        "d": "Bottes de ski"
+      },
+      {
+        "t": "1 bagage de 23 kg",
+        "d": "Vêtements et effets personnels"
+      }
+    ],
+    "noteSoute": "Le sac à skis et le sac à bottes sont en plus du bagage de 23 kg.",
+    "cabine": [
+      {
+        "t": "1 bagage à main",
+        "d": "Format cabine, dans le compartiment au-dessus du siège"
+      },
+      {
+        "t": "1 sac personnel",
+        "d": "Sac à dos ou sac à main, sous le siège devant vous"
+      }
+    ],
+    "important": "Très important : les batteries externes et les batteries au lithium voyagent avec vous en cabine, jamais en soute.",
+    "conseils": [
+      "Gardez dans votre bagage à main : passeport, médicaments, chargeur et une tenue de rechange.",
+      "Mettez une étiquette à votre nom sur chaque sac."
+    ]
+  },
+  "documents": {
+    "liste": [
+      "Passeport valide au moins 3 mois après la date de retour",
+      "Assurance voyage : numéro de police et téléphone d’assistance",
+      "Carte de crédit et un peu d’euros",
+      "Confirmation de vol et documents de voyage reçus de Gendron Ski"
+    ],
+    "notes": [
+      "À l’arrivée en Europe, un contrôle biométrique (empreintes et photo) est fait au premier passage à la frontière : prévoyez un peu d’attente à Zurich."
+    ]
+  },
   "infosSki": [
     "Niveau du groupe : intermédiaire. Les suggestions privilégient les pistes bleues et quelques rouges.",
     "Forfait, location de skis et cours : les détails seront donnés au cocktail de bienvenue.",
@@ -211,7 +269,7 @@
     {
       "type": "whatsapp",
       "titre": "Groupe WhatsApp du voyage",
-      "url": "https://chat.whatsapp.com/JQN05rN1hKiBw5gP0Eb2wo?s=cl&p=i&mlu=4&ilr=4&iam=2"
+      "url": "https://chat.whatsapp.com/JQN05rN1hKiBw5gP0Eb2wo"
     },
     {
       "type": "facebook",
