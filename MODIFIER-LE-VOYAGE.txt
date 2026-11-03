@@ -32,7 +32,8 @@ AJOUTER UNE ANNONCE (dans "annonces")
       "texte": "Rendez-vous déplacé à 9 h 15 au pied du Gaislachkogl."
     },
   - "date" : l'annonce n'apparaît qu'à partir de cette heure → on peut les préparer d'avance.
-  - "fuseau" : "Europe/Vienna" en Autriche, "America/Toronto" pour l'heure de Montréal.
+  - "fuseau" : "America/Montreal" pour l'heure de Montréal (tout ce qui se passe avant le vol au départ de YUL),
+    "Europe/Vienna" pour l'heure d'Autriche (à partir de l'arrivée à Zurich).
 
 AJOUTER UN RENDEZ-VOUS AU PROGRAMME (dans "items" du bon jour)
     { "heure": "09:00", "titre": "Départ ski en groupe", "lieu": "Gare aval Gaislachkogl", "note": "Forfait en main.", "rdv": true }
@@ -65,6 +66,14 @@ POINTS MÉTÉO (dans "meteo" › "points")
   - "domaine" : "soelden" ou "gurgl" → le point s'affiche selon le domaine choisi (Sölden, Gurgl, Les deux).
   - "altitude" en mètres règle la prévision; les coordonnées peuvent être approximatives.
   - Pour un autre voyage, remplacez par les points de la nouvelle station.
+
+WEBCAMS (dans "webcams") — onglet Météo
+    { "domaine": "soelden", "nom": "Giggijoch", "altitude": 2290,
+      "image": "https://wtvpict.feratel.com/picture/37/5762.jpeg?dcsdesign=feratel4",
+      "lien": "https://webtv.feratel.com/webtv/?cam=5762&design=v4&c2=0&c8=0" }
+  - "image" : photo affichée (si elle ne charge pas, la case affiche « Vue en direct ↗ »)
+  - "lien" : la vue en direct officielle, ouverte en touchant la case
+  - Pour retirer une webcam, supprimez son bloc.
 
 RÈGLES JSON À RESPECTER
   - Texte toujours entre guillemets droits "…"

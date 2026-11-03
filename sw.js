@@ -1,6 +1,6 @@
 // Service worker généré par html2pwa.py
 // Changez CACHE à chaque mise à jour pour forcer l'actualisation chez les utilisateurs.
-const CACHE = 'solden-2027-voyage-de-ski-c35884e6';
+const CACHE = 'solden-2027-voyage-de-ski-dc4ee43d';
 const CORE = ['./', 'index.html', 'manifest.webmanifest',
               'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png',
               'voyage.json', 'hero.webp', 'installer.html', 'affiche-bagages.html'];
@@ -45,6 +45,9 @@ self.addEventListener('fetch', e => {
     })));
     return;
   }
+
+  // Images en direct (webcams, paramètre live=) : toujours le réseau, jamais le cache.
+  if (url.searchParams.has('live')) return;
 
   // Images externes : mises en cache au premier affichage (best effort).
   if (req.destination === 'image') {

@@ -3,7 +3,7 @@
   "sousTitre": "Voyage de ski en groupe",
   "debut": "2027-03-05",
   "fin": "2027-03-13",
-  "niveau": "Intermédiaire",
+  "niveau": "Intermédiaire-avancé",
   "accompagnateur": {
     "nom": "Mathieu",
     "role": "Votre accompagnateur",
@@ -12,14 +12,14 @@
   "annonces": [
     {
       "date": "2026-11-03T07:00",
-      "fuseau": "America/Toronto",
+      "fuseau": "America/Montreal",
       "texte": "Bienvenue dans l’app du voyage! Installez-la sur votre écran d’accueil (Partager › Sur l’écran d’accueil). Le programme et les annonces se mettront à jour ici jusqu’au départ."
     }
   ],
   "avantDepart": [
     {
       "date": "2027-02-19",
-      "fuseau": "America/Toronto",
+      "fuseau": "America/Montreal",
       "heure": "",
       "titre": "Réunion d’information sur Teams",
       "lieu": "En ligne · Microsoft Teams",
@@ -33,7 +33,7 @@
   "programme": [
     {
       "date": "2027-03-05",
-      "fuseau": "America/Toronto",
+      "fuseau": "America/Montreal",
       "titre": "Départ de Montréal",
       "items": [
         {
@@ -257,7 +257,7 @@
     ]
   },
   "infosSki": [
-    "Niveau du groupe : intermédiaire. Les suggestions privilégient les pistes bleues et quelques rouges.",
+    "Niveau du groupe : intermédiaire-avancé. Les suggestions sont surtout des pistes rouges, avec quelques bleues pour varier ou souffler.",
     "Forfait, location de skis et cours : les détails seront donnés au cocktail de bienvenue.",
     "Avant chaque journée, consultez l’onglet Ski pour voir les remontées et pistes ouvertes."
   ],
@@ -320,5 +320,112 @@
         "altitude": 3000
       }
     ]
-  }
+  },
+  "webcams": [
+    {
+      "domaine": "soelden",
+      "nom": "Village",
+      "altitude": 1377,
+      "image": "https://panodata.panomax.com/cams/5572/mobile_800x600.jpg",
+      "lien": "https://soelden.panomax.com/ort-winter"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Gaislachkogl · mi-station",
+      "altitude": 2174,
+      "image": "https://panodata.panomax.com/cams/6657/mobile_800x600.jpg",
+      "lien": "https://soelden.panomax.com/gaislachkogl-mittelstation"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Gaislachkogl · sommet",
+      "altitude": 3048,
+      "image": "https://wtvpict.feratel.com/picture/37/5761.jpeg?dcsdesign=feratel4",
+      "lien": "https://webtv.feratel.com/webtv/?cam=5761&design=v4&c2=0&c8=0"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Hochsölden",
+      "altitude": 2077,
+      "image": "https://panodata.panomax.com/cams/501/mobile_800x600.jpg",
+      "lien": "https://soelden.panomax.com/hochsoelden"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Giggijoch",
+      "altitude": 2290,
+      "image": "https://wtvpict.feratel.com/picture/37/5762.jpeg?dcsdesign=feratel4",
+      "lien": "https://webtv.feratel.com/webtv/?cam=5762&design=v4&c2=0&c8=0"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Schwarzkogl · gare aval",
+      "altitude": 2580,
+      "image": "https://panodata.panomax.com/cams/6666/mobile_800x600.jpg",
+      "lien": "https://soelden.panomax.com/schwarzkogl-talstation"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Seekogl",
+      "altitude": 2662,
+      "image": "https://wtvpict.feratel.com/picture/37/5760.jpeg?dcsdesign=feratel4",
+      "lien": "https://webtv.feratel.com/webtv/?cam=5760&design=v4&c2=0&c8=0"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Glacier de Rettenbach",
+      "altitude": 2680,
+      "image": "https://panodata.panomax.com/cams/196/mobile_800x600.jpg",
+      "lien": "https://soelden.panomax.com/rettenbach"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Schwarze Schneid · mi-station",
+      "altitude": 3000,
+      "image": "https://panodata.panomax.com/cams/216/mobile_800x600.jpg",
+      "lien": "https://soelden.panomax.com/schwarzeschneid"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Glacier de Tiefenbach · gare aval",
+      "altitude": 2800,
+      "image": "https://panodata.panomax.com/cams/195/mobile_800x600.jpg",
+      "lien": "https://soelden.panomax.com/tiefenbach"
+    },
+    {
+      "domaine": "soelden",
+      "nom": "Glacier de Tiefenbach · sommet",
+      "altitude": 3250,
+      "image": "https://panodata.panomax.com/cams/6660/mobile_800x600.jpg",
+      "lien": "https://soelden.panomax.com/tiefenbachkogl-felssteg"
+    },
+    {
+      "domaine": "gurgl",
+      "nom": "Hochgurgl",
+      "altitude": 2410,
+      "image": "https://wtvpict.feratel.com/picture/37/5570.jpeg?dcsdesign=feratel4",
+      "lien": "https://webtv.feratel.com/webtv/?design=v5&cam=5570&c2=0&c8=0"
+    },
+    {
+      "domaine": "gurgl",
+      "nom": "Crosspoint",
+      "altitude": 2157,
+      "image": "https://wtvpict.feratel.com/picture/37/5571.jpeg?dcsdesign=feratel4",
+      "lien": "https://webtv.feratel.com/webtv/?design=v5&cam=5571&c2=0&c8=0"
+    },
+    {
+      "domaine": "gurgl",
+      "nom": "Hohe Mut",
+      "altitude": 2670,
+      "image": "https://wtvpict.feratel.com/picture/37/5650.jpeg?dcsdesign=feratel4",
+      "lien": "https://webtv.feratel.com/webtv/?design=v5&cam=5650&c2=0&c8=0"
+    },
+    {
+      "domaine": "gurgl",
+      "nom": "Festkogl",
+      "altitude": 2670,
+      "image": "https://wtvpict.feratel.com/picture/37/5651.jpeg?dcsdesign=feratel4",
+      "lien": "https://webtv.feratel.com/webtv/?design=v5&cam=5651&c2=0&c8=0"
+    }
+  ]
 }
