@@ -18,7 +18,7 @@
   ],
   "avantDepart": [
     {
-      "date": "2027-02-19",
+      "date": "2027-02-22",
       "fuseau": "America/Montreal",
       "heure": "",
       "titre": "Réunion d’information sur Teams",
@@ -47,7 +47,7 @@
           "heure": "16:45",
           "titre": "Vol Montréal → Zurich",
           "lieu": "Swiss · YUL → ZRH",
-          "note": "Vol de nuit. Gardez dans votre bagage à main : passeport, médicaments, chargeur et une tenue de rechange."
+          "note": "Vol de nuit. Gardez dans votre bagage à main : passeport, médicaments, chargeur et batteries."
         }
       ]
     },
@@ -221,14 +221,14 @@
       },
       {
         "t": "Sac à bottes",
-        "d": "Bottes de ski"
+        "d": "Bottes de ski et casque de ski"
       },
       {
         "t": "1 bagage de 23 kg",
         "d": "Vêtements et effets personnels"
       }
     ],
-    "noteSoute": "Le sac à skis et le sac à bottes sont en plus du bagage de 23 kg.",
+    "noteSoute": "Le sac à skis et le sac à bottes sont en plus du bagage de 23 kg et sont aussi soumis a la règle du 23 kg pour le sac a ski et bottes combinés.",
     "cabine": [
       {
         "t": "1 bagage à main",
@@ -241,7 +241,7 @@
     ],
     "important": "Très important : les batteries externes et les batteries au lithium voyagent avec vous en cabine, jamais en soute.",
     "conseils": [
-      "Gardez dans votre bagage à main : passeport, médicaments, chargeur et une tenue de rechange.",
+      "Gardez dans votre bagage à main : passeport, médicaments, chargeur et vos batteries.",
       "Mettez une étiquette à votre nom sur chaque sac."
     ]
   },
