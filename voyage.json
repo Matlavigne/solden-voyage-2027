@@ -26,7 +26,7 @@
           "heure": "14:45",
           "titre": "Rendez-vous à la porte d’embarquement",
           "lieu": "Aéroport Montréal-Trudeau (YUL)",
-          "note": "Rendez-vous 2 h avant le départ. Prévoyez d’arriver à l’aéroport assez tôt pour l’enregistrement des bagages et la sécurité.",
+          "note": "Rendez-vous 2 h avant le départ. Prévoyez d’arriver à l’aéroport assez tôt pour l’enregistrement des bagages et la sécurité, je vous y attendrai avec une affiche GENDRONSKI.",
           "rdv": true
         },
         {
@@ -46,28 +46,28 @@
           "heure": "",
           "titre": "Arrivée à Zurich",
           "lieu": "Aéroport de Zurich (ZRH)",
-          "note": "Heure d’arrivée et point de rencontre à confirmer.",
-          "aConfirmer": true
+          "note": "Arrivée vers 6:15, point de rencontre au carousel de baggages avant de sortir de l'aérogare.",
+          "aConfirmer": false
         },
         {
           "heure": "",
           "titre": "Transfert vers Sölden",
           "lieu": "Zurich → Sölden",
-          "note": "Détails du transfert à confirmer.",
-          "aConfirmer": true
+          "note": "Transfert en autobus vers Solden.",
+          "aConfirmer": false
         },
         {
           "heure": "",
           "titre": "Installation à l’hôtel",
           "lieu": "Hotel Bäckelar Wirt",
-          "note": "Arrivée à l’hôtel à partir de 14 h selon la fiche de l’hôtel.",
-          "aConfirmer": true
+          "note": "Arrivée à l’hôtel vers 12:00.",
+          "aConfirmer": false
         },
         {
           "heure": "18:00",
           "titre": "Cocktail de bienvenue",
           "lieu": "Bar de l’hôtel Bäckelar Wirt",
-          "note": "Présentation du programme de la semaine et remise des infos ski.",
+          "note": "Présentation du programme de la semaine et remise des passe de ski.",
           "rdv": true
         }
       ]
@@ -151,7 +151,7 @@
           "heure": "",
           "titre": "Journée de ski",
           "lieu": "Domaine de Sölden",
-          "note": "Dernière journée sur les pistes. Programme à venir.",
+          "note": "Dernière journée sur les pistes. Retirer les skie et bottes du skiroom avant 18:00. Programme à venir.",
           "aConfirmer": true
         }
       ]
@@ -165,7 +165,7 @@
           "heure": "",
           "titre": "Départ de l’hôtel",
           "lieu": "Hotel Bäckelar Wirt",
-          "note": "Libération des chambres avant 10 h selon la fiche de l’hôtel. Heure de départ du transfert à confirmer.",
+          "note": "Libération des chambres avant 5:30 h. Heure de départ du transfert à confirmer.",
           "aConfirmer": true
         },
         {
@@ -211,12 +211,12 @@
     {
       "type": "whatsapp",
       "titre": "Groupe WhatsApp du voyage",
-      "url": ""
+      "url": "https://chat.whatsapp.com/JQN05rN1hKiBw5gP0Eb2wo?s=cl&p=i&mlu=4&ilr=4&iam=2"
     },
     {
       "type": "facebook",
       "titre": "Groupe Facebook du voyage",
-      "url": ""
+      "url": "https://www.facebook.com/share/g/1CKP25dum8/?mibextid=wwXIfr"
     },
     {
       "type": "site",
