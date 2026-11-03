@@ -1026,6 +1026,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <tr><td>Hilfe!</td><td>À l’aide!</td></tr>
     </tbody></table>
   </div>
+  <div class="card" id="confidentialite">
+    <h3>Confidentialité</h3>
+    <ul class="ul" style="font-size:14px">
+      <li><b>Aucun cookie, aucune statistique de visite, aucune publicité.</b> L’app ne demande ni compte, ni nom, ni courriel.</li>
+      <li>Vos cases cochées, le domaine choisi, les annonces lues et une copie du programme, de la météo et de l’état des pistes restent <b>uniquement sur ce téléphone</b>, pour que l’app fonctionne hors ligne. Rien n’est envoyé à l’accompagnateur ni à personne d’autre.</li>
+      <li>Votre <b>position GPS</b> n’est utilisée que si vous touchez « Ma position », après l’autorisation de votre téléphone. Elle sert à afficher le point bleu sur la carte et n’est transmise à personne.</li>
+      <li>Pour afficher son contenu, l’app contacte GitHub (hébergement), Intermaps (pistes), Open-Meteo (météo), OpenStreetMap et OpenSnowMap (carte), Panomax et Feratel (webcams). Comme pour tout site, ils voient l’adresse IP de l’appareil, sans autre information.</li>
+      <li>Les liens externes (Gendron Ski, WhatsApp, Facebook, vues en direct) ouvrent leurs sites, avec leurs propres règles de confidentialité.</li>
+    </ul>
+    <p style="margin-top:10px"><button type="button" class="light" id="wipe">Effacer mes données de cet appareil</button></p>
+    <p class="small" id="wipe-msg"></p>
+  </div>
   <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a></p>
 </section>
 </main>
@@ -1395,6 +1407,18 @@ function renderInfos(){
 }
 document.addEventListener('change',e=>{const dc=e.target.closest('[data-doc]');if(dc){const s2=new Set(store.get(K.docs,[]));dc.checked?s2.add(+dc.dataset.doc):s2.delete(+dc.dataset.doc);store.set(K.docs,[...s2]);return;}const c=e.target.closest('[data-ck]');if(!c)return;const done=new Set(store.get(K.check,[]));c.checked?done.add(+c.dataset.ck):done.delete(+c.dataset.ck);store.set(K.check,[...done]);});
 document.addEventListener('click',e=>{if(e.target.closest('[data-goto-bag]'))setTimeout(()=>$('#bagages').scrollIntoView({behavior:'smooth'}),80);if(e.target.closest('[data-show-hotel]'))setTimeout(()=>$('#m-hotel').click(),60);});
+
+/* ---------- Effacer les données locales ---------- */
+let wipeArmed=false;
+$('#wipe').addEventListener('click',async()=>{
+  const b=$('#wipe');
+  if(!wipeArmed){wipeArmed=true;b.textContent='Touchez encore pour confirmer';$('#wipe-msg').textContent='Les cases cochées, le domaine choisi et les copies hors ligne seront effacés. L’app restera installée.';setTimeout(()=>{if(wipeArmed){wipeArmed=false;b.textContent='Effacer mes données de cet appareil';$('#wipe-msg').textContent='';}},6000);return;}
+  wipeArmed=false;
+  try{Object.keys(localStorage).filter(k=>k.startsWith('solden-voyage-2027-')).forEach(k=>localStorage.removeItem(k));}catch(e){}
+  try{if(window.caches){for(const k of await caches.keys()){const c=await caches.open(k);for(const r of await c.keys()){if(!r.url.startsWith(location.origin))await c.delete(r);}}}}catch(e){}
+  b.textContent='Données effacées';$('#wipe-msg').textContent='C’est fait. Rechargez l’app avec Internet pour retrouver le programme à jour.';
+  setTimeout(()=>location.reload(),1800);
+});
 
 /* ---------- Navigation ---------- */
 let current='accueil';
