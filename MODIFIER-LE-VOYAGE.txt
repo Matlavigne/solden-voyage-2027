@@ -12,6 +12,11 @@ MODIFIER DEPUIS LE TÉLÉPHONE OU L'ORDINATEUR
      ex. https://VOTRE-COMPTE.github.io/solden-voyage-2027/?verif
      → bandeau vert = fichier valide · bandeau rouge = erreur de syntaxe (l'app garde l'ancienne version)
 
+COMPTE À REBOURS (dans "depart")
+    "depart": { "date": "2027-03-05", "heure": "16:45", "fuseau": "America/Montreal" }
+  - Le carré « J – » de l'Accueil compte jusqu'à cette heure (le décollage).
+  - Le rendez-vous à la porte reste affiché à part dans « Prochain rendez-vous ».
+
 LIENS DU GROUPE (dans "liens") — WhatsApp, Facebook, etc.
   Collez le lien d'invitation entre les guillemets de "url" :
     { "type": "whatsapp", "titre": "Groupe WhatsApp du voyage", "url": "https://chat.whatsapp.com/XXXXXXXX" },

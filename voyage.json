@@ -4,6 +4,12 @@
   "sousTitre": "Voyage de ski en groupe",
   "debut": "2027-03-05",
   "fin": "2027-03-13",
+  "depart": {
+    "date": "2027-03-05",
+    "heure": "16:45",
+    "fuseau": "America/Montreal",
+    "note": "Heure du décollage de YUL, utilisée pour le compte à rebours J –"
+  },
   "niveau": "Intermédiaire-avancé",
   "accompagnateur": {
     "nom": "Mathieu",
