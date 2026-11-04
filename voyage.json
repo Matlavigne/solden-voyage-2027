@@ -31,7 +31,6 @@
       "titre": "Réunion d’information sur Teams",
       "lieu": "En ligne · Microsoft Teams",
       "note": "Infos générales sur le voyage et réponses à vos questions. Date et heure à confirmer; le lien de la réunion sera envoyé dans le groupe WhatsApp.",
-      "lien": "",
       "lienTexte": "Rejoindre la réunion Teams",
       "rdv": true,
       "aConfirmer": true
@@ -68,22 +67,19 @@
           "titre": "Arrivée à Zurich",
           "lieu": "Aéroport de Zurich (ZRH)",
           "note": "Arrivée vers 6 h 15. Point de rencontre au carrousel à bagages, avant de sortir de l’aérogare.",
-          "aConfirmer": false,
           "rdv": true
         },
         {
           "heure": "",
           "titre": "Transfert vers Sölden",
           "lieu": "Zurich → Sölden",
-          "note": "Transfert en autocar vers Sölden.",
-          "aConfirmer": false
+          "note": "Transfert en autocar vers Sölden."
         },
         {
           "heure": "12:00",
           "titre": "Installation à l’hôtel",
           "lieu": "Hotel Bäckelar Wirt",
-          "note": "Arrivée à l’hôtel vers 12 h.",
-          "aConfirmer": false
+          "note": "Arrivée à l’hôtel vers 12 h."
         },
         {
           "heure": "18:00",
@@ -216,8 +212,7 @@
       "À côté de la gare aval de la télécabine Gaislachkogl; la piste se termine à environ 80 m de l’hôtel.",
       "Arrêt de ski-bus juste devant l’hôtel.",
       "Local à skis avec sèche-chaussures.",
-      "Sauna, bain de vapeur et cabine infrarouge.",
-      "Arrivée de 14 h à 21 h · départ avant 10 h (fiche de l’hôtel, à confirmer pour le groupe)."
+      "Sauna, bain de vapeur et cabine infrarouge."
     ]
   },
   "bagages": {
