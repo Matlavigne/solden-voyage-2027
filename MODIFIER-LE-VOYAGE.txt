@@ -4,7 +4,13 @@ MODIFIER L'APP DU VOYAGE — sans rien reconstruire
 Tout ce qui change pendant le voyage est dans UN fichier : voyage.json
 Les voyageurs voient la nouvelle version à la prochaine ouverture de l'app (avec réseau).
 
-MODIFIER DEPUIS LE TÉLÉPHONE OU L'ORDINATEUR
+LE PLUS SIMPLE : LA PAGE D'ÉDITION
+  Ouvrez https://monaccompagnateur.ca/solden-voyage-2027/editeur.html
+  (ajoutez-la à vos favoris; elle n'est liée nulle part dans l'app).
+  Formulaires par section → « Aperçu » pour voir le résultat → « Publier ».
+  Première fois : section « Connexion à GitHub », collez votre jeton (étapes dans la page).
+
+MODIFIER DIRECTEMENT LE FICHIER (méthode avancée)
   1. github.com → votre dépôt → cliquez voyage.json
   2. Icône crayon (Edit this file)
   3. Faites la modification, puis « Commit changes »
