@@ -1,6 +1,6 @@
 // Service worker généré par html2pwa.py
 // Changez CACHE à chaque mise à jour pour forcer l'actualisation chez les utilisateurs.
-const CACHE = 'gendronski-solden-2027-290292a2';
+const CACHE = 'gendronski-solden-2027-c9249206';
 const CORE = ['./', 'index.html', 'manifest.webmanifest',
               'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png',
               'voyage.json', 'hero.webp', 'installer.html', 'affiche-bagages.html', 'og.jpg', 'editeur.html'];
@@ -56,7 +56,10 @@ self.addEventListener('fetch', e => {
     e.respondWith(fetch(req, {cache: 'no-store'}).then(r => {
       if (r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put(url.pathname, copy)); }
       return r;
-    }).catch(() => caches.match(url.pathname)));
+    }).catch(() => caches.match(url.pathname).then(hit => hit && hit.blob().then(b => {
+      const h = new Headers(hit.headers); h.set('X-Hors-Ligne', '1');  // l'app affiche alors le bandeau « Hors ligne »
+      return new Response(b, {status: 200, headers: h});
+    }))));
     return;
   }
 
