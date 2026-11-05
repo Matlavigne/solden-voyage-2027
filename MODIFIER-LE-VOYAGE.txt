@@ -72,6 +72,16 @@ AJOUTER UN LIEU SUR LA CARTE (dans "lieux")
     { "id": "rdv1", "nom": "Point de rencontre", "detail": "Devant la billetterie", "lat": 46.9600, "lng": 11.0060 }
   Coordonnées : appui long sur le lieu dans Google Maps ou Plans → copier les deux nombres.
 
+BONNES ADRESSES (dans "adresses") — onglet Ski : restos sur les pistes, après-ski et bars
+    { "nom": "Zum Kuckuck", "categories": ["apres-ski"], "domaine": "soelden", "secteur": "Village · gare aval Giggijoch",
+      "description": "…", "acces": "…", "infos": "Ouvert dès 15 h", "tags": ["Musique live", "Terrasse"],
+      "lien": "", "lienTexte": "", "coupDeCoeur": true, "lat": null, "lng": null }
+  - "categories" : "restaurant", "apres-ski" ou "pratique" (une adresse peut en avoir plusieurs)
+  - "domaine" : "soelden" ou "gurgl" → l'adresse suit le domaine choisi par le voyageur
+  - "coupDeCoeur": true → l'adresse passe en premier avec « ★ Coup de cœur de l'accompagnateur »
+  - "lat"/"lng" remplis → l'adresse apparaît aussi sur la carte (bouton « Voir sur la carte »)
+  - Le plus simple : section « Bonnes adresses » de la page d'édition.
+
 POINTS MÉTÉO (dans "meteo" › "points")
     { "domaine": "soelden", "nom": "Mi-station", "lat": 46.950, "lng": 10.986, "altitude": 2174 },
   - "domaine" : "soelden" ou "gurgl" → le point s'affiche selon le domaine choisi (Sölden, Gurgl, Les deux).

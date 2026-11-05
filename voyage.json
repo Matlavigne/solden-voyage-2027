@@ -263,6 +263,496 @@
     "Forfait, location de skis et cours : les détails seront donnés au cocktail de bienvenue.",
     "Avant chaque journée, consultez l’onglet Ski pour voir les remontées et pistes ouvertes."
   ],
+  "adresses": [
+    {
+      "nom": "ice Q",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "soelden",
+      "secteur": "Gaislachkogl",
+      "description": "La pause panoramique et gastronomique du Gaislachkogl, à 3 048 m.",
+      "acces": "Départ : gare aval Gaislachkogl. Prendre Gaislachkogl I puis II jusqu’au sommet; suivre le cheminement piéton signalé vers ice Q. Aucune descente de piste nécessaire pour venir déjeuner. Revenir par les remontées pour éviter une descente rouge.",
+      "infos": "Cuisine alpine gastronomique; vins, lounge et tapas · Service à table + lounge",
+      "tags": [
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/soelden?lang=en&focus=110097",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "FALCON · À la carte",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "soelden",
+      "secteur": "Gaislachkogl",
+      "description": "Le point de rendez-vous facile depuis Gaislachkogl; deux formats de service distincts.",
+      "acces": "Départ : gare aval Gaislachkogl. Monter avec Gaislachkogl I à la gare intermédiaire; suivre FALCON. Market au rez-de-chaussée, restaurant à la carte à l’étage. Aucune piste à descendre pour le rejoindre.",
+      "infos": "Cuisine régionale et internationale · Service à table",
+      "tags": [
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/soelden?lang=en&focus=110118",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "FALCON · Market",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "soelden",
+      "secteur": "Gaislachkogl",
+      "description": "Le point de rendez-vous facile depuis Gaislachkogl; deux formats de service distincts.",
+      "acces": "Départ : gare aval Gaislachkogl. Monter avec Gaislachkogl I à la gare intermédiaire; suivre FALCON. Market au rez-de-chaussée, restaurant à la carte à l’étage. Aucune piste à descendre pour le rejoindre.",
+      "infos": "Cuisine régionale et internationale · Self-service / marché",
+      "tags": [
+        "Service rapide",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/soelden?lang=en&focus=110088",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Wirtshaus Giggijoch",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "soelden",
+      "secteur": "Giggijoch",
+      "description": "Une halte à la gare amont Giggijoch, pratique pour regrouper les skieurs.",
+      "acces": "Départ : gare aval Giggijochbahn. Monter par Giggijochbahn C30; rejoindre le restaurant au pôle de restauration de la gare amont. Aucune piste nécessaire. Depuis votre base Gaislachkogl : rejoindre la gare aval Giggijoch par le transport local; le carnet ne donne pas un enchaînement intégral à ski entre les deux.",
+      "infos": "Cuisine tyrolienne et internationale · Service à table",
+      "tags": [
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/soelden?lang=en&focus=110145",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Gampe Thaya",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "soelden",
+      "secteur": "Giggijoch",
+      "description": "La halte locale : la fiche annonce des produits de la ferme et une situation sur la nº 11.",
+      "acces": "Départ : portion de la piste rouge nº 11 à Giggijoch, en amont de Gampe Thaya. Suivre la nº 11 et le fléchage de la cabane. La fiche officielle ne détaille pas chaque bifurcation ni l’enchaînement complet depuis Gaislachkogl; contrôler le plan avant de quitter le secteur.",
+      "infos": "Spécialités de l’Ötztal; produits fermiers et fromages · Service à table",
+      "tags": [
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/soelden?lang=en&focus=110091",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Restaurant Schwarzkogl",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "soelden",
+      "secteur": "Giggijoch",
+      "description": "Vue publiée sur le Rettenbach et le Gaislachkogl.",
+      "acces": "Départ : gare amont de Langegg. Suivre la bleue nº 23, prendre Einzeiger, puis suivre la liaison nº 24 jusqu’au restaurant, conformément au descriptif d’accès publié pour 2025. Le télésiège Einzeiger est désormais un 8 places; vérifier le fléchage actuel. Depuis Gaislachkogl intermédiaire : la source 2025 cite nº 6 → Langegg; cette approche doit être reconfirmée sur le plan 2026–2027.",
+      "infos": "Cuisine régionale et internationale · Self-service + service à table",
+      "tags": [
+        "Service rapide",
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/soelden?lang=en&focus=110132",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Rettenbach Market Restaurant",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "soelden",
+      "secteur": "Glaciers",
+      "description": "Vue sur le tracé de Coupe du monde et deux formats de restauration.",
+      "acces": "Départ : arrivée de Gletscherexpress sur le Rettenbach. Rejoindre le pôle de restauration au pied du glacier selon les cheminements locaux. Pour venir d’en haut : les pistes nº 31 noire et nº 33 bleue aboutissent au secteur du restaurant; la fiche cite aussi nº 30. Les embranchements depuis Gaislachkogl ne sont pas détaillés dans cette fiche. La route et le bus glacier sont annoncés avant l’ouverture du domaine hivernal, pas comme un accès piéton garanti en mars.",
+      "infos": "Tyrol, grill, soupes, pizza et pâtes · Self-service + Gletschertisch à table",
+      "tags": [
+        "Service rapide",
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/soelden?lang=en&focus=110133",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Tiefenbach Gletscher Restaurant",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "soelden",
+      "secteur": "Glaciers",
+      "description": "Restaurant à la gare aval Tiefenbach, avec vue sur les hauts sommets.",
+      "acces": "Départ : gare amont Schwarze Schneid. Prendre la bleue nº 32 vers le tunnel, puis la bleue nº 38 jusqu’à la gare aval Tiefenbach et au restaurant. Depuis la gare amont Tiefenbach, rester sur la nº 38. La fiche mentionne aussi les pistes nº 36, 39 et 40 au pied du glacier; ce ne sont pas toutes des accès de même difficulté. Liaison complète depuis Gaislachkogl non détaillée ici.",
+      "infos": "Tyrol, pizza, pâtes, soupes et pâtisseries · Self-service",
+      "tags": [
+        "Service rapide",
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/soelden?lang=en&focus=110111",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Hohe Mut Alm",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Obergurgl",
+      "description": "Panorama des hauts sommets depuis Hohe Mut.",
+      "acces": "Départ : gare aval Hohe Mut Bahn à Obergurgl. Monter par Hohe Mut I puis II; suivre l’accès signalé au restaurant à la gare amont. Aucune piste nécessaire pour venir. Si vous skiez ensuite la nº 1 : rouge au catalogue, malgré sa mention parmi les descentes les plus exigeantes de la station. Depuis Gaislachkogl : transfert routier vers Obergurgl, puis cette séquence locale.",
+      "infos": "Cuisine alpine et tyrolienne · Service à table",
+      "tags": [
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/obergurgl_hochgurgl?lang=en&focus=105853",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Top Mountain Star",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Hochgurgl",
+      "description": "Le panorama à 3 030 m, avec vue lointaine annoncée vers les Dolomites.",
+      "acces": "Départ : gare aval Hochgurglbahn I à Pill. Prendre Hochgurgl I, Hochgurgl II puis Wurmkogl II, suivant la séquence du billet piéton officiel. Rejoindre le Top Mountain Star par le cheminement indiqué. Les transferts entre gares sont à vérifier sur place. Aucun itinéraire à ski facile de retour n’est garanti ici : la nº 28 est noire. Depuis Gaislachkogl : transfert routier jusqu’à Pill.",
+      "infos": "Boissons et petite restauration panoramique · Service à table / bar",
+      "tags": [
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/obergurgl_hochgurgl?lang=en&focus=105720",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Top Mountain Crosspoint",
+      "categories": [
+        "restaurant"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Hochgurgl",
+      "description": "Une pause à la base de Kirchenkar, accessible par la route.",
+      "acces": "Départ : entrée routière Top Mountain Crosspoint, Timmelsjochstraße 8, Hochgurgl. Rejoindre le restaurant dans le complexe qui accueille la gare aval Kirchenkarbahn. Depuis Gaislachkogl, transfert routier nécessaire vers Hochgurgl; aucune liaison à ski Sölden–Gurgl. Pour les skieurs déjà sur le domaine : le carnet ne prétend pas vérifier une chaîne de pistes complète vers ce bâtiment.",
+      "infos": "Cuisine régionale et internationale; pizzas au feu de bois · Service à table",
+      "tags": [
+        "Service à table",
+        "Terrasse",
+        "Panorama"
+      ],
+      "lien": "https://winter.intermaps.com/obergurgl_hochgurgl?lang=en&focus=105725",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Nederhütte",
+      "categories": [
+        "restaurant",
+        "apres-ski"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Obergurgl",
+      "description": "La halte conviviale d’Obergurgl, avec musique annoncée selon le programme. En fin de journée, grande terrasse et orchestre maison à partir de 16 h : c’est l’après-ski le plus animé d’Obergurgl.",
+      "acces": "Départ : partie basse du secteur Roßkar / Familienabfahrt à Obergurgl. Le restaurant est positionné sur le plan officiel à 2 104 m. La chaîne de bifurcations et le numéro exact du dernier accès ne sont pas suffisamment documentés dans les sources retenues : suivre la signalétique Nederhütte et demander confirmation avant de descendre. Depuis Gaislachkogl : transfert routier vers Obergurgl nécessaire.",
+      "infos": "Cuisine tyrolienne et internationale · Service à table",
+      "tags": [
+        "Service à table",
+        "Terrasse",
+        "Panorama",
+        "Musique live"
+      ],
+      "lien": "https://winter.intermaps.com/obergurgl_hochgurgl?lang=en&focus=105736",
+      "lienTexte": "Voir sur le plan officiel",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Zum Kuckuck",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "soelden",
+      "secteur": "Gare aval Giggijoch",
+      "description": "Un des après-ski les plus courus de Sölden, avec une ambiance animée dès la fermeture des pistes.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "DJ / soirée"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "s’Finale",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "soelden",
+      "secteur": "Innerwald, sur la piste",
+      "description": "Le dernier arrêt de la journée, directement sur la piste, avec musique de fête. La navette Zentrum Shuttle ramène au centre du village.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "DJ / soirée"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Hühnersteign",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "soelden",
+      "secteur": "Descente nº 30 vers la vallée",
+      "description": "Sur la piste de retour depuis le glacier, avec musique live certains jours. La piste mène ensuite directement à Sölden.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "Musique live",
+        "Terrasse"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Marco’s",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "soelden",
+      "secteur": "Centre de Sölden",
+      "description": "Bar d’après-ski accessible à skis depuis la piste du Giggijoch : toit rabattable, terrasse au soleil, service rapide et sports à la télé.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "Terrasse",
+        "Service rapide"
+      ],
+      "lien": "https://www.tyrol.com/activities/food/restaurants/marcos-1",
+      "lienTexte": "Fiche Tyrol.com",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Après-ski Philipp",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "soelden",
+      "secteur": "Sölden",
+      "description": "Une des adresses d’après-ski bien connues du village, avec terrasse ensoleillée, bouchées et apéro.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "Terrasse"
+      ],
+      "lien": "https://www.philipp-soelden.at",
+      "lienTexte": "Site du Philipp",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Fire & Ice",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "soelden",
+      "secteur": "Centre de Sölden",
+      "description": "Après-ski puis soirée : des grands classiques d’après-ski jusqu’à la musique house.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "DJ / soirée"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Katapult Club",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "soelden",
+      "secteur": "Centre de Sölden",
+      "description": "Le plus grand club de Sölden, avec DJ internationaux et programme différent chaque soir. La Kristall-Lounge, à l’étage, est plus tranquille.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "DJ / soirée"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Schirmbar Edelweiss",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Obergurgl · gares aval Hohe Mut et Rosskar",
+      "description": "Le bar-parasol de l’Hotel Edelweiss, au pied des remontées : terrasse ensoleillée et bières brassées sur place.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "Terrasse"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Après-ski Jenewein",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Obergurgl · près de la télécabine Hohe Mut",
+      "description": "Terrasse couverte et chauffée, avec couvertures, face à la piste : l’endroit tranquille pour un vin chaud.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "Terrasse"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Toni’s Almhütte",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Obergurgl · Hotel Olymp, sur les pistes",
+      "description": "Dans un bâtiment de 400 ans, un des rendez-vous favoris quand les remontées ferment.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "Terrasse"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Josl-Keller",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Obergurgl · Hotel Josl",
+      "description": "Boîte de nuit au sous-sol, ouverte en soirée jusque tard, avec soirées DJ, groupes live, fléchettes et baby-foot.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "DJ / soirée",
+        "Musique live"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    },
+    {
+      "nom": "Fassl Bar",
+      "categories": [
+        "apres-ski"
+      ],
+      "domaine": "gurgl",
+      "secteur": "Centre d’Obergurgl, à côté de l’Hotel Mathiesn",
+      "description": "Petit bar en forme de tonneau, une dizaine de places à l’intérieur, réputé pour ses fins de soirée animées.",
+      "acces": "",
+      "infos": "",
+      "tags": [
+        "DJ / soirée"
+      ],
+      "lien": "",
+      "lienTexte": "",
+      "coupDeCoeur": false,
+      "lat": null,
+      "lng": null
+    }
+  ],
   "organisateur": {
     "nom": "Gendron Ski",
     "site": "https://www.voyagesgendron.com/ski/"

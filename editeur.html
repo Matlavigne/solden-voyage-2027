@@ -63,6 +63,7 @@ details.sec .body{padding:0 16px 16px;border-top:1px solid var(--line)}
 ol.steps{margin:8px 0 0;padding-left:20px;font-size:14px}ol.steps li{margin:5px 0}
 code{background:var(--soft);border-radius:5px;padding:1px 5px;font-size:13px}
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
+.multi{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px}.f .lab{font-size:13px;font-weight:600;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -196,6 +197,16 @@ const S=[
   {id:'infosSki',titre:'Infos ski',type:'rootlines',key:'infosSki',label:'Une info par ligne'},
   {id:'lieux',titre:'Lieux sur la carte',type:'list',key:'lieux',help:'Coordonnées : appui long sur le lieu dans Google Maps ou Plans, puis copiez les deux nombres.',label:l=>l.nom||'',newItem:()=>({id:'lieu'+Date.now().toString(36).slice(-4),nom:'',detail:'',lat:null,lng:null}),
     fields:[['nom','Nom','text'],['detail','Détail','text'],['lat','Latitude','number'],['lng','Longitude','number']]},
+  {id:'adresses',titre:'Bonnes adresses : restos, après-ski, bars',type:'list',key:'adresses',help:'Affichées dans l’onglet Ski, selon le domaine choisi par le voyageur. Les « coups de cœur » passent en premier avec une étoile. Avec une latitude et une longitude, l’adresse apparaît aussi sur la carte.',
+    label:a=>(a.coupDeCoeur?'★ ':'')+(a.nom||'Nouvelle adresse')+(a.domaine?' · '+(a.domaine==='gurgl'?'Gurgl':'Sölden'):''),
+    newItem:()=>({nom:'',categories:['restaurant'],domaine:'soelden',secteur:'',description:'',acces:'',infos:'',tags:[],lien:'',lienTexte:'',coupDeCoeur:false,lat:null,lng:null}),
+    fields:[['nom','Nom','text'],['domaine','Domaine','select',[['soelden','Sölden'],['gurgl','Obergurgl-Hochgurgl']]],
+      ['categories','Catégories','multi',[['restaurant','Restaurant sur les pistes'],['apres-ski','Après-ski et bar'],['pratique','Pratique (location, pharmacie…)']],'full'],
+      ['coupDeCoeur','Coup de cœur de l’accompagnateur (en premier, avec ★)','bool','full'],
+      ['secteur','Secteur ou village','text'],['infos','Infos courtes (cuisine, heures…)','text'],
+      ['description','Description','textarea'],['acces','Comment s’y rendre','textarea'],
+      ['tags','Étiquettes','multi',[['Service rapide','Service rapide'],['Service à table','Service à table'],['Terrasse','Terrasse'],['Panorama','Panorama'],['Musique live','Musique live'],['DJ / soirée','DJ / soirée'],['Réservation conseillée','Réservation conseillée'],['Petit budget','Petit budget']],'full'],
+      ['lien','Lien (facultatif)','url'],['lienTexte','Texte du lien','text'],['lat','Latitude (facultatif)','number'],['lng','Longitude (facultatif)','number']]},
 ];
 const HANDLED=new Set(['titre','datesTexte','debut','fin','niveau','sousTitre',...S.filter(s=>s.key).map(s=>s.key)]);
 function nowLocal(tz){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return`${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;}
@@ -211,6 +222,7 @@ function field(path,[k,lab,type,extra,extra2],obj){
   const wrap=h=>`<div class="f${full?' full':''}">${type==='bool'?'':`<label for="${id}">${esc(lab)}</label>`}${h}</div>`;
   switch(type){
     case 'bool':return`<label class="chk${full?' full':''}"><input type="checkbox" id="${id}" data-p="${P}" data-t="bool"${v?' checked':''}> ${esc(lab)}</label>`;
+    case 'multi':{const have=Array.isArray(v)?v:[];const extraVals=have.filter(x=>!extra.some(([a])=>a===x));return`<div class="f full"><span class="lab">${esc(lab)}</span><div class="multi">${[...extra,...extraVals.map(x=>[x,x])].map(([a,b])=>`<label class="chk"><input type="checkbox" data-p="${P}" data-t="multi" data-g="${id}" value="${esc(a)}"${have.includes(a)?' checked':''}> ${esc(b)}</label>`).join('')}</div></div>`;}
     case 'textarea':return wrap(`<textarea id="${id}" data-p="${P}" data-t="text">${esc(v)}</textarea>`);
     case 'lines':return wrap(`<textarea id="${id}" data-p="${P}" data-t="lines">${esc((v||[]).join('\n'))}</textarea>`);
     case 'pairs':return wrap(`<textarea id="${id}" data-p="${P}" data-t="pairs">${esc((v||[]).map(x=>x.t+(x.d?' | '+x.d:'')).join('\n'))}</textarea>`);
@@ -254,7 +266,8 @@ document.addEventListener('input',e=>{
   const el=e.target;const t=el.dataset.t;if(!t)return;
   if(t==='raw'){try{const o=JSON.parse(el.value||'{}');Object.keys(V).filter(k=>!HANDLED.has(k)).forEach(k=>delete V[k]);Object.assign(V,o);$('#raw-msg').textContent='';el.parentNode.classList.remove('bad');}catch(err){$('#raw-msg').textContent='Erreur : '+err.message;el.parentNode.classList.add('bad');}changed();return;}
   const p=JSON.parse(el.dataset.p);let v;
-  if(t==='bool')v=el.checked;
+  if(t==='multi')v=$$(`input[data-g="${el.dataset.g}"]`).filter(x=>x.checked).map(x=>x.value);
+  else if(t==='bool')v=el.checked;
   else if(t==='num')v=el.value===''?null:Number(el.value);
   else if(t==='lines')v=el.value.split('\n').map(x=>x.trim()).filter(Boolean);
   else if(t==='pairs')v=el.value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>{const [a,...b]=x.split('|');return b.length?{t:a.trim(),d:b.join('|').trim()}:{t:a.trim()};});
@@ -263,7 +276,7 @@ document.addEventListener('input',e=>{
   setP(V,p,v);changed();
   const hd=el.closest('.item')?.querySelector(':scope>.hd>b');if(hd){const ip=JSON.parse(el.closest('.item').querySelector('[data-act=del]').dataset.p);const cfg=findCfg(ip);if(cfg?.label)hd.textContent=cfg.label(getP(V,ip));}
 });
-document.addEventListener('change',e=>{if(e.target.dataset.t==='bool'||e.target.tagName==='SELECT')e.target.dispatchEvent(new Event('input',{bubbles:true}));});
+document.addEventListener('change',e=>{if(e.target.dataset.t==='bool'||e.target.dataset.t==='multi'||e.target.tagName==='SELECT')e.target.dispatchEvent(new Event('input',{bubbles:true}));});
 function findCfg(p){const s=S.find(x=>x.key===p[0]);if(!s)return null;return p.length>2&&s.child?s.child:s;}
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b)return;
