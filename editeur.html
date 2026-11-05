@@ -97,6 +97,26 @@ code{background:var(--soft);border-radius:5px;padding:1px 5px;font-size:13px}
     </div>
   </details>
 
+  <details class="sec" id="s-phrase">
+    <summary><h2>Phrase du voyage (accès protégé)</h2><span class="n" id="ph-state">…</span></summary>
+    <div class="body">
+      <p class="help">Avec une phrase, le contenu publié est chiffré : sans elle, personne ne peut lire le programme, les annonces, l’hôtel ni les liens du groupe. Les voyageurs l’entrent une seule fois sur leur téléphone. Restent publics : le titre, les dates, la météo et les webcams.</p>
+      <div class="grid">
+        <div class="f full"><label for="ph-in">Phrase du voyage</label><input id="ph-in" type="password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="ex. trois-mots-simples"></div>
+        <label class="chk"><input type="checkbox" id="ph-show"> Afficher la phrase</label>
+        <label class="chk"><input type="checkbox" id="ph-keep" checked> Mémoriser sur cet appareil</label>
+      </div>
+      <div class="addbar"><button type="button" id="ph-open">Ouvrir le contenu</button><button type="button" class="light" id="ph-gen">Proposer une phrase</button></div>
+      <p class="help" id="ph-msg"></p>
+      <div id="ph-invite" hidden>
+        <p class="help" style="margin-top:12px;font-weight:600;color:var(--ink)">Lien d’invitation pour les voyageurs</p>
+        <p class="help">Page d’installation avec le code QR et la phrase. À envoyer aux voyageurs seulement (courriel ou groupe WhatsApp), jamais en public.</p>
+        <div class="f full"><input id="ph-link" readonly></div>
+        <div class="addbar"><button type="button" class="light" id="ph-copy">Copier le lien</button><a class="btn light" id="ph-openlink" target="_blank" rel="noopener">Ouvrir la page</a></div>
+      </div>
+    </div>
+  </details>
+
   <div id="sections"></div>
 </main>
 
@@ -127,11 +147,48 @@ const api=(path,opt={})=>fetch('https://api.github.com/repos/'+encodeURIComponen
 const b64enc=s=>{const b=new TextEncoder().encode(s);let x='';for(let i=0;i<b.length;i+=0x8000)x+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));return btoa(x);};
 const b64dec=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,'')),c=>c.charCodeAt(0)));
 
+/* ---------- Phrase du voyage : chiffrement AES-GCM, clé PBKDF2 (le même procédé que l’app) ---------- */
+const PUBLIC_KEYS=['titre','datesTexte','sousTitre','debut','fin','meteo','webcams','plans'];
+const ITER=600000;
+const PH_KEY=()=>'editeur-phrase-'+(cx.repo||'local');
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const tob64=u=>{let x='';for(let i=0;i<u.length;i+=0x8000)x+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(x);};
+const normPhrase=p=>String(p||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim().replace(/[\s_.,;:–—-]+/g,'-').replace(/^-+|-+$/g,'');
+async function deriveK(phrase,salt,iter){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(normPhrase(phrase)),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:unb64(salt),iterations:iter},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+async function decryptFile(f,phrase){const k=await deriveK(phrase,f.chiffre.salt,f.chiffre.iter||ITER);const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(f.chiffre.iv)},k,unb64(f.chiffre.data));const pub={...f};delete pub.chiffre;return {...pub,...JSON.parse(new TextDecoder().decode(pt))};}
+async function encryptFile(o,phrase,salt){
+  salt=salt||tob64(crypto.getRandomValues(new Uint8Array(16)));const iv=crypto.getRandomValues(new Uint8Array(12));
+  const k=await deriveK(phrase,salt,ITER);const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},k,new TextEncoder().encode(JSON.stringify(o))));
+  const out={};PUBLIC_KEYS.forEach(x=>{if(o[x]!==undefined)out[x]=o[x];});
+  out.chiffre={v:1,kdf:'PBKDF2-SHA256',iter:ITER,salt,iv:tob64(iv),data:tob64(ct)};return out;
+}
+let RAW=null,encSalt=null,openPhrase='';   // fichier en ligne tel que lu; sel actuel; phrase qui l’a ouvert
+const phNow=()=>normPhrase($('#ph-in').value);
+const phDirty=()=>!!V&&phNow()!==openPhrase;
+function savePh(){if($('#ph-keep').checked&&phNow())LS.set(PH_KEY(),$('#ph-in').value.trim());else LS.del(PH_KEY());}
+function phUi(){
+  const p=phNow();
+  $('#ph-state').textContent=RAW?.chiffre?(openPhrase?'✓ protégé':'🔒 phrase requise'):(p?'sera protégé':'non protégé');
+  const appUrl=new URL('./',location.href).href;
+  $('#ph-invite').hidden=!p;
+  if(p){const l=appUrl+'installer.html#cle='+encodeURIComponent(p);$('#ph-link').value=l;$('#ph-openlink').href=l;}
+  if(V&&phDirty())$('#ph-msg').textContent=RAW?.chiffre?(p?'Nouvelle phrase : elle s’appliquera à la prochaine publication. Les voyageurs devront entrer la nouvelle phrase.':'Le contenu publié est protégé : une phrase est obligatoire pour publier.'):'La protection s’activera à la prochaine publication (touchez « Publier »).';
+  else if(V)$('#ph-msg').textContent=p?'Le contenu publié est protégé par cette phrase.':'Aucune phrase : le contenu publié est lisible par toute personne qui connaît l’adresse.';
+}
+$('#ph-show').onchange=()=>{$('#ph-in').type=$('#ph-show').checked?'text':'password';};
+$('#ph-in').addEventListener('input',()=>{savePh();phUi();if(V)changed();});
+$('#ph-keep').onchange=savePh;
+$('#ph-open').onclick=()=>{savePh();load();};
+$('#ph-copy').onclick=()=>{navigator.clipboard?.writeText($('#ph-link').value).then(()=>{$('#ph-copy').textContent='Lien copié';setTimeout(()=>$('#ph-copy').textContent='Copier le lien',2000);});};
+const MOTS=['marmotte','chamois','fondue','raclette','tartiflette','poudreuse','gondole','telesiege','sapin','glacier','sommet','strudel','chalet','luge','flocon','bouquetin','edelweiss','tyrol','yodel','refuge','lagopede','schnaps','crepe','cime','corniche','vallon','bretzel','grenat','myrtille','lanterne'];
+$('#ph-gen').onclick=()=>{const r=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n;};const w=[];while(w.length<3){const m=MOTS[r(MOTS.length)];if(!w.includes(m))w.push(m);}$('#ph-in').value=w.join('-');$('#ph-show').checked=true;$('#ph-in').type='text';savePh();phUi();if(V)changed();};
+$('#ph-in').value=LS.get(PH_KEY(),'')||'';
+
 /* ---------- État ---------- */
 let V=null,base='',sha=null,canWrite=false;
 function msg(id,t,cls){const e=$(id);if(!t){e.hidden=true;return;}e.hidden=false;e.className='msg '+(cls||'info');e.innerHTML=t;}
 const pretty=o=>JSON.stringify(o,null,2)+'\n';
-function dirty(){return V&&pretty(V)!==base;}
+function dirty(){return V&&(pretty(V)!==base||phDirty());}
 let saveT=0;
 function changed(){
   const d=dirty();
@@ -151,7 +208,15 @@ async function load(){
   if(txt==null){try{const r=await fetch('voyage.json',{cache:'no-store'});if(r.ok){txt=await r.text();from='le site';}}catch(e){}}
   if(txt==null){msg('#m-load','Impossible de lire voyage.json. Vérifiez la connexion Internet.','err');return;}
   try{V=JSON.parse(txt);}catch(e){msg('#m-load','voyage.json contient une erreur de syntaxe : '+esc(e.message)+'. Corrigez-le une fois sur GitHub, puis rechargez cette page.','err');return;}
-  base=pretty(V);
+  RAW=V;encSalt=V.chiffre?.salt||null;openPhrase='';
+  if(V.chiffre){
+    const ph=$('#ph-in').value;
+    if(!normPhrase(ph)){V=null;$('#s-phrase').open=true;phUi();msg('#m-load','Le contenu publié est protégé. Entrez la phrase du voyage dans « Phrase du voyage », puis touchez « Ouvrir le contenu ».','warn');$('#sections').innerHTML='';return;}
+    msg('#m-load','Ouverture du contenu protégé…','info');
+    try{V=await decryptFile(RAW,ph);openPhrase=normPhrase(ph);}
+    catch(e){V=null;$('#s-phrase').open=true;phUi();msg('#m-load','Phrase incorrecte : impossible d’ouvrir le contenu publié. Vérifiez la phrase dans « Phrase du voyage ».','err');$('#sections').innerHTML='';return;}
+  }
+  base=pretty(V);phUi();
   msg('#m-load','Contenu chargé depuis '+from+'.'+(from!=='GitHub'?' Connectez-vous à GitHub pour pouvoir publier.':''),from==='GitHub'?'ok':'info');
   setTimeout(()=>msg('#m-load'),4000);
   const dr=LS.get(DRAFT_KEY(),null);
@@ -323,9 +388,12 @@ $('#b-pub').onclick=async()=>{
     const cur=await api('/contents/voyage.json?ref=main',{cache:'no-store'});const cj=cur.ok?await cur.json():null;
     if(cj&&sha&&cj.sha!==sha&&!b.dataset.force){b.dataset.force='1';msg('#m-res','voyage.json a été modifié sur GitHub depuis l’ouverture de cette page (par vous ailleurs ou par quelqu’un d’autre). Touchez « Publier » encore une fois pour remplacer cette version par la vôtre, ou rechargez la page pour repartir de la version en ligne.','warn');window.scrollTo({top:0,behavior:'smooth'});return;}
     const out=pretty(clean(V));
-    const r=await api('/contents/voyage.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'Mise à jour du voyage depuis l’éditeur',content:b64enc(out),sha:cj?.sha||sha||undefined,branch:'main'})});
+    const ph=phNow();
+    if(!ph&&RAW?.chiffre){throw Error('le contenu en ligne est protégé : entrez la phrase du voyage avant de publier');}
+    const file=ph?pretty(await encryptFile(JSON.parse(out),ph,ph===openPhrase?encSalt:null)):out;
+    const r=await api('/contents/voyage.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'Mise à jour du voyage depuis l’éditeur',content:b64enc(file),sha:cj?.sha||sha||undefined,branch:'main'})});
     if(!r.ok){const t=await r.text();throw Error(r.status+' '+t.slice(0,140));}
-    const j=await r.json();sha=j.content.sha;V=JSON.parse(out);base=out;LS.del(DRAFT_KEY());delete b.dataset.force;
+    const j=await r.json();sha=j.content.sha;V=JSON.parse(out);base=out;RAW=JSON.parse(file);encSalt=RAW.chiffre?.salt||null;openPhrase=ph;LS.del(DRAFT_KEY());delete b.dataset.force;phUi();
     render();changed();
     msg('#m-res','✓ Publié. Les voyageurs verront les changements dans une à deux minutes. <a href="./?verif" target="_blank" rel="noopener">Vérifier dans l’app</a>','ok');window.scrollTo({top:0,behavior:'smooth'});
   }catch(e){msg('#m-res','La publication a échoué : '+esc(e.message)+'. Vos modifications restent enregistrées sur cet appareil; réessayez.','err');}

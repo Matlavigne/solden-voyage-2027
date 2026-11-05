@@ -101,6 +101,18 @@ RÈGLES JSON À RESPECTER
   - Virgule entre deux éléments, jamais après le dernier d'une liste
   - Pas de guillemet " à l'intérieur d'un texte : utilisez « » ou ’
 
+PHRASE DU VOYAGE (accès protégé)
+  Page d'édition › section « Phrase du voyage » : entrez une phrase de 3 mots (ou « Proposer une phrase »),
+  puis « Publier ». Le contenu est alors chiffré : sans la phrase, voyage.json est illisible.
+  - Restent publics : titre, dates, météo, webcams.
+  - Voyageurs : ils tapent la phrase une seule fois par téléphone (majuscules, accents, espaces sans importance).
+  - « Lien d'invitation » (dans la même section) : page d'installation avec le code QR et la phrase.
+    À envoyer aux voyageurs seulement. Sur iPhone, l'app installée demande quand même la phrase une fois.
+  - Changer la phrase : tous les voyageurs devront entrer la nouvelle. À éviter pendant le séjour.
+  - Une fois le contenu protégé, l'éditeur demande la phrase pour l'ouvrir. La perdre = repartir du
+    fichier de sauvegarde. Gardez-la avec votre jeton GitHub.
+  - Modifier voyage.json à la main sur GitHub n'est plus possible quand il est chiffré : passez par l'éditeur.
+
 CONFIDENTIALITÉ
   L'adresse de l'app est publique : aucun nom de voyageur, numéro de chambre,
   de téléphone personnel ou de réservation dans voyage.json.

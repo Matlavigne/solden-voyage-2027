@@ -81,6 +81,7 @@ ol.steps b{display:block}
       <h2>Scannez avec l’appareil photo</h2>
       <p style="margin:0">Pointez l’appareil photo de votre téléphone vers le code, puis touchez le lien qui apparaît. Ou tapez l’adresse :</p>
       <div class="url" id="url">—</div>
+      <div class="url" id="phrase" style="display:none;margin-top:8px;background:#fdf3d8;border-color:#e0b44a">Phrase du voyage : <b id="phrase-txt"></b><br><span style="font-size:13px;font-weight:400">Sur iPhone, l’app installée la demande une fois : tapez-la.</span></div>
       <div class="btns noprint">
         <a class="btn" id="open" href="./">Ouvrir l’app</a>
         <button class="btn light" type="button" id="share">Partager ce lien</button>
@@ -2440,8 +2441,13 @@ var qrcode = function() {
   var p=new URLSearchParams(location.search);
   var online=location.protocol!=='file:';
   var app=p.get('url')||(online?new URL('./',location.href).href:'');
+  // Lien d’invitation : installer.html#cle=la-phrase → le code QR ouvre l’app déjà déverrouillée
+  var cm=location.hash.match(/(?:^#|&)cle=([^&]*)/),cle='';
+  if(cm){try{cle=decodeURIComponent(cm[1]);}catch(e){cle=cm[1];}}
+  var appBase=app;if(cle&&app)app=app+'#cle='+encodeURIComponent(cle);
+  if(cle){var pe=document.getElementById('phrase');if(pe){pe.style.display="block";document.getElementById('phrase-txt').textContent=cle;}}
   var urlEl=document.getElementById('url');
-  urlEl.textContent=app?app.replace(/^https?:\/\//,'').replace(/\/$/,''):'adresse disponible une fois l’app en ligne';
+  urlEl.textContent=appBase?appBase.replace(/^https?:\/\//,'').replace(/\/$/,''):'adresse disponible une fois l’app en ligne';
   if(app){
     document.getElementById('open').href=app;
     var q=qrcode(0,'M');q.addData(app);q.make();
@@ -2453,7 +2459,7 @@ var qrcode = function() {
   if(ios)document.getElementById('os-ios').classList.add('mine');
   if(android)document.getElementById('os-android').classList.add('mine');
   var sh=document.getElementById('share');
-  var shareUrl=online?location.href.split('#')[0].split('?')[0]:app;
+  var shareUrl=online?location.href.split('?')[0]:app;
   sh.addEventListener('click',function(){
     if(navigator.share){navigator.share({title:'App du voyage Sölden 2027',text:'Installez l’app du voyage de ski Sölden 2027 :',url:shareUrl}).catch(function(){});}
     else if(navigator.clipboard){navigator.clipboard.writeText(shareUrl).then(function(){sh.textContent='Lien copié';setTimeout(function(){sh.textContent='Partager ce lien';},2000);});}
