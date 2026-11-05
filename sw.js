@@ -1,6 +1,6 @@
 // Service worker généré par html2pwa.py
 // Changez CACHE à chaque mise à jour pour forcer l'actualisation chez les utilisateurs.
-const CACHE = 'gendronski-solden-2027-fd04d730';
+const CACHE = 'gendronski-solden-2027-ccfc52cb';
 const CORE = ['./', 'index.html', 'manifest.webmanifest',
               'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png',
               'voyage.json', 'hero.webp', 'installer.html', 'affiche-bagages.html', 'og.jpg', 'editeur.html'];
