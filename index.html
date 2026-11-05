@@ -1078,7 +1078,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p style="margin-top:10px"><button type="button" class="light" id="wipe">Effacer mes données de cet appareil</button></p>
     <p class="small" id="wipe-msg"></p>
   </div>
-  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a></p>
+  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 09:43</span></p>
 </section>
 </main>
 
@@ -1132,16 +1132,17 @@ let PREVIEW=false;
 async function refreshVoyage(){
   if(location.protocol==='file:'||PREVIEW)return;
   try{
-    const r=await fetch('voyage.json',{cache:'no-store'});
+    const ac=new AbortController(),to=setTimeout(()=>ac.abort(),6000);
+    const r=await fetch('voyage.json',{cache:'no-store',signal:ac.signal}).finally(()=>clearTimeout(to));
     if(!r.ok)throw Error('HTTP '+r.status);
     const txt=await r.text();
     let v;try{v=JSON.parse(txt);}catch(e){showVerif('voyage.json contient une erreur de syntaxe : '+e.message+'\nL’app continue d’afficher la dernière version valide.');return;}
     if(!valid(v)){showVerif('voyage.json est lisible mais incomplet : il faut au moins « debut », « fin » et « programme ».');return;}
     if(r.headers.get('X-Hors-Ligne')){setOffline(true);V=normTz(v);renderAll();setOffline(true);return;}
-    setOffline(false);store.set(K.voyage,{at:Date.now(),data:v});V=normTz(v);syncMsg='Programme à jour.';
+    setOffline(!navigator.onLine);store.set(K.voyage,{at:Date.now(),data:v});V=normTz(v);syncMsg='Programme à jour.';
     if(VERIF)showVerif('✓ voyage.json est valide ('+v.programme.length+' jours, '+(v.annonces||[]).length+' annonces).',true);
     renderAll();
-  }catch(e){if(e instanceof TypeError)setOffline(true);if(!navigator.onLine)syncMsg=(syncMsg?syncMsg+' ':'')+'Hors connexion.';renderHome();}
+  }catch(e){if(e instanceof TypeError||e.name==='AbortError')setOffline(true);if(!navigator.onLine)syncMsg=(syncMsg?syncMsg+' ':'')+'Hors connexion.';renderHome();}
 }
 /* Bandeau hors ligne */
 function setOffline(off){
@@ -1153,7 +1154,8 @@ function setOffline(off){
   el.innerHTML=`<b>Hors ligne</b> · programme enregistré${quand?' le '+esc(quand):''}. Météo, état des pistes et plan reviendront avec Internet.`;
 }
 addEventListener('offline',()=>setOffline(true));
-addEventListener('online',()=>{setOffline(false);refreshVoyage();});
+addEventListener('online',()=>refreshVoyage());
+addEventListener('pageshow',()=>{if(!navigator.onLine)setOffline(true);});
 function showVerif(t,ok){if(!VERIF){console.warn(t);return;}const el=$('#verif');el.hidden=false;el.textContent=t;el.style.background=ok?'#e3f1e6':'';el.style.color=ok?'#246b3c':'';el.style.borderColor=ok?'#b7d8bf':'';}
 function allItems(pre=true){
   const out=[];
@@ -1553,7 +1555,7 @@ boot();
 show(location.hash.slice(1)||'accueil');
 // Charge l'état du domaine en arrière-plan pour l'accueil
 if(navigator.onLine){loadEtat();if(!wx||wx.sig!==wxSig(wxPoints())||Date.now()-wx.fetched>30*60e3)loadWx();}
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){refreshVoyage();renderHome();if(current==='ski'&&Date.now()-etatFetched()>5*60e3)loadEtat();}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(!navigator.onLine)setOffline(true);refreshVoyage();renderHome();if(current==='ski'&&Date.now()-etatFetched()>5*60e3)loadEtat();}});
 setInterval(()=>{if(!document.hidden&&current==='accueil')renderHome();},60e3);
 </script>
 <!-- PWA:enregistrement -->
