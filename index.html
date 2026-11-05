@@ -51,11 +51,11 @@ main{padding-top:14px}
 .view[hidden]{display:none}
 .view>h2{font-size:30px;margin:6px 0 14px}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:900;background:var(--white);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
-nav.tabs a{flex:1;min-width:0;height:var(--tab);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;color:var(--muted);text-decoration:none;position:relative}
+nav.tabs a{flex:1;min-width:0;height:var(--tab);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10.5px;letter-spacing:-.1px;color:var(--muted);text-decoration:none;position:relative}
 nav.tabs a svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav.tabs a[aria-current="page"]{color:var(--pine);font-weight:600}
 nav.tabs a .dot{position:absolute;top:10px;left:calc(50% + 8px);width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid var(--white)}
-@media(min-width:900px){body{padding-bottom:0}nav.tabs{position:sticky;top:0;bottom:auto;border-top:0;border-bottom:1px solid var(--line);justify-content:center}nav.tabs a{flex:0 0 112px;flex-direction:row;height:52px;font-size:13px}nav.tabs a svg{width:19px;height:19px}nav.tabs a .dot{top:14px;left:auto;right:18px}}
+@media(min-width:900px){body{padding-bottom:0}nav.tabs{position:sticky;top:0;bottom:auto;border-top:0;border-bottom:1px solid var(--line);justify-content:center}nav.tabs a{flex:0 0 108px;flex-direction:row;height:52px;font-size:13px}nav.tabs a svg{width:19px;height:19px}nav.tabs a .dot{top:14px;left:auto;right:18px}}
 /* Accueil */
 .status-banner{background:var(--pine);color:#fff;border-radius:var(--radius);padding:18px;margin:0 0 12px}
 .status-banner .big{font-family:var(--head);font-size:34px;line-height:1.1}
@@ -903,6 +903,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <a href="#programme" data-tab="programme"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Programme</a>
   <a href="#meteo" data-tab="meteo"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.5"/><path d="M9 2.5v1.5M3.5 9H2M4.6 4.6l1 1M13.4 4.6l-1 1"/><path d="M8 20h9a3.5 3.5 0 0 0 .4-7 5 5 0 0 0-9.6 1.2A3 3 0 0 0 8 20z"/></svg>Météo</a>
   <a href="#ski" data-tab="ski"><svg viewBox="0 0 24 24"><path d="M3 20L21 4M7 21l1.5-4.5M14 8l3-3M4 15l3 1"/><circle cx="16" cy="11" r="2"/></svg>Ski</a>
+  <a href="#sortir" data-tab="sortir"><svg viewBox="0 0 24 24"><path d="M5 4h14l-7 8zM12 12v8M8 20h8M15.5 4l2-2"/></svg>Sortir</a>
   <a href="#carte" data-tab="carte"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Carte</a>
   <a href="#infos" data-tab="infos"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Infos</a>
 </nav>
@@ -976,8 +977,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <p class="overline" style="margin-top:22px">Pour notre niveau · <span id="niveau">intermédiaire</span></p>
   <div class="card"><ul class="ul" id="infos-ski"></ul></div>
   <div class="picks" id="picks"></div>
+</section>
 
-  <p class="overline" style="margin-top:22px">Bonnes adresses</p>
+<!-- SORTIR : restos et bars -->
+<section class="view" id="v-sortir" hidden aria-labelledby="t-sortir">
+  <h2 id="t-sortir">Restos et bars</h2>
+  <div class="controls"><div class="seg" role="group" aria-label="Domaine" data-dom-seg></div></div>
   <div class="controls"><div class="chips" role="group" aria-label="Type d’adresse" id="ad-cats"></div></div>
   <div id="restos"></div>
   <p class="small" id="ad-note">Sélection de l’accompagnateur. Horaires et ambiance peuvent changer : vérifiez sur place.</p>

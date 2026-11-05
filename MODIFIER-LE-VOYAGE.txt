@@ -72,7 +72,7 @@ AJOUTER UN LIEU SUR LA CARTE (dans "lieux")
     { "id": "rdv1", "nom": "Point de rencontre", "detail": "Devant la billetterie", "lat": 46.9600, "lng": 11.0060 }
   Coordonnées : appui long sur le lieu dans Google Maps ou Plans → copier les deux nombres.
 
-BONNES ADRESSES (dans "adresses") — onglet Ski : restos sur les pistes, après-ski et bars
+BONNES ADRESSES (dans "adresses") — onglet Sortir : restos sur les pistes, après-ski et bars
     { "nom": "Zum Kuckuck", "categories": ["apres-ski"], "domaine": "soelden", "secteur": "Village · gare aval Giggijoch",
       "description": "…", "acces": "…", "infos": "Ouvert dès 15 h", "tags": ["Musique live", "Terrasse"],
       "lien": "", "lienTexte": "", "coupDeCoeur": true, "lat": null, "lng": null }

@@ -197,7 +197,7 @@ const S=[
   {id:'infosSki',titre:'Infos ski',type:'rootlines',key:'infosSki',label:'Une info par ligne'},
   {id:'lieux',titre:'Lieux sur la carte',type:'list',key:'lieux',help:'Coordonnées : appui long sur le lieu dans Google Maps ou Plans, puis copiez les deux nombres.',label:l=>l.nom||'',newItem:()=>({id:'lieu'+Date.now().toString(36).slice(-4),nom:'',detail:'',lat:null,lng:null}),
     fields:[['nom','Nom','text'],['detail','Détail','text'],['lat','Latitude','number'],['lng','Longitude','number']]},
-  {id:'adresses',titre:'Bonnes adresses : restos, après-ski, bars',type:'list',key:'adresses',help:'Affichées dans l’onglet Ski, selon le domaine choisi par le voyageur. Les « coups de cœur » passent en premier avec une étoile. Avec une latitude et une longitude, l’adresse apparaît aussi sur la carte.',
+  {id:'adresses',titre:'Bonnes adresses : restos, après-ski, bars',type:'list',key:'adresses',help:'Affichées dans l’onglet Sortir, selon le domaine choisi par le voyageur. Les « coups de cœur » passent en premier avec une étoile. Avec une latitude et une longitude, l’adresse apparaît aussi sur la carte.',
     label:a=>(a.coupDeCoeur?'★ ':'')+(a.nom||'Nouvelle adresse')+(a.domaine?' · '+(a.domaine==='gurgl'?'Gurgl':'Sölden'):''),
     newItem:()=>({nom:'',categories:['restaurant'],domaine:'soelden',secteur:'',description:'',acces:'',infos:'',tags:[],lien:'',lienTexte:'',coupDeCoeur:false,lat:null,lng:null}),
     fields:[['nom','Nom','text'],['domaine','Domaine','select',[['soelden','Sölden'],['gurgl','Obergurgl-Hochgurgl']]],
