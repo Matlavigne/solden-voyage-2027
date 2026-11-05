@@ -201,6 +201,13 @@ body.is-offline .hero .wrap{padding-top:22px}
 .lock-msg{min-height:1.3em;margin:4px 0;font-weight:600}.lock-msg.err{color:var(--red)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 body.locked{overflow:hidden}
+.passe-img{margin:10px 0 8px}.passe-img img{width:100%;max-height:340px;object-fit:contain;border-radius:12px;border:1px solid var(--line);background:var(--soft);display:block;cursor:zoom-in}
+.passe-img[hidden]{display:none}
+.passe-num{display:flex;flex-direction:column;gap:4px;margin:10px 0}.passe-num label{font-size:13px;font-weight:600}
+.passe-num input{font:inherit;font-size:17px;letter-spacing:.5px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px}
+.passe-acts{gap:8px;flex-wrap:wrap}.passe-acts [hidden]{display:none!important}
+.passe-zoom{position:fixed;inset:0;z-index:2500;background:rgba(5,15,30,.94);display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top)) 12px 16px}
+.passe-zoom img{max-width:100%;max-height:100%;object-fit:contain}
 /* Carte */
 .mapbox{position:relative;height:calc(100vh - 290px);min-height:380px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#e4e9e0;margin:0 0 10px}
 #map{position:absolute;inset:0}
@@ -1010,6 +1017,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div class="planbox"><iframe id="plan-frame" title="Plan officiel des pistes et remontées (Internet nécessaire)" allow="fullscreen" allowfullscreen></iframe></div>
     <p class="small" id="plan-note">Plan interactif officiel de la station · Internet nécessaire. Pour vous situer avec le GPS, utilisez l’onglet Carte.</p>
   </div>
+  <p class="small" style="margin:0 0 14px"><a href="#infos" data-goto-passe>Ma passe de ski : photo et numéro de série →</a></p>
   <div class="sumgrid" id="st-sum"></div>
   <div class="controls">
     <div class="seg" role="group" aria-label="Filtrer par état"><button type="button" data-st="" aria-pressed="false">Tous</button><button type="button" data-st="open" aria-pressed="true">Ouverts</button><button type="button" data-st="closed" aria-pressed="false">Fermés</button></div>
@@ -1050,6 +1058,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <section class="view" id="v-infos" hidden aria-labelledby="t-infos">
   <h2 id="t-infos">Infos pratiques</h2>
   <div class="card" id="contact"></div>
+  <div class="card" id="passe">
+    <h3>Ma passe de ski</h3>
+    <p class="small">Photographiez votre passe dès que vous l’avez : en cas de perte, la caisse des remontées peut la remplacer à partir de son numéro de série. La photo reste sur ce téléphone seulement; elle n’est jamais envoyée.</p>
+    <figure class="passe-img" id="passe-fig" hidden><img id="passe-photo" alt="Photo de ma passe de ski"><figcaption class="small" id="passe-date"></figcaption></figure>
+    <div class="passe-num"><label for="passe-numero">Numéro de série</label><input id="passe-numero" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Recopiez le numéro imprimé sur la passe"></div>
+    <div class="row passe-acts">
+      <label class="btn" for="passe-file" id="passe-add">Prendre la photo</label>
+      <input type="file" id="passe-file" accept="image/*" class="sr">
+      <button type="button" class="light" id="passe-big" hidden>Agrandir</button>
+      <button type="button" class="light" id="passe-del" hidden>Effacer</button>
+    </div>
+    <p class="small" id="passe-msg" role="status"></p>
+    <p class="small">Perte ou vol : présentez-vous à une caisse des remontées avec ce numéro et une pièce d’identité. Les frais de remplacement sont ceux de la station.</p>
+  </div>
   <div class="card"><h3>Installer ou partager l’app</h3><p>Page avec le code QR et les étapes pour iPhone et Android, à envoyer aux autres voyageurs.</p><p><a class="btn light" href="installer.html">Comment installer l’app</a></p></div>
   <div class="card">
     <h3>Urgences en Autriche</h3>
@@ -1104,7 +1126,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p style="margin-top:10px"><button type="button" class="light" id="wipe">Effacer mes données de cet appareil</button></p>
     <p class="small" id="wipe-msg"></p>
   </div>
-  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 12:52</span></p>
+  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 18:14</span></p>
 </section>
 </main>
 
@@ -1370,6 +1392,41 @@ document.addEventListener('click',e=>{
   const b=e.target.closest('#plan-big');if(b){const on=$('#plan').classList.toggle('big');b.setAttribute('aria-pressed',on);b.textContent=on?'Réduire':'Agrandir';if(on)$('#plan').scrollIntoView({block:'start'});}
 });
 
+/* ---------- Ma passe de ski (photo et numéro, sur l’appareil seulement) ---------- */
+const PASSE_KEY='solden-voyage-2027-passe-v1';
+function renderPasse(){
+  const p=store.get(PASSE_KEY,{})||{};
+  $('#passe-fig').hidden=!p.photo;if(p.photo)$('#passe-photo').src=p.photo;
+  $('#passe-date').textContent=p.at?'Photo du '+new Intl.DateTimeFormat('fr-CA',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}).format(new Date(p.at)):'';
+  if(document.activeElement!==$('#passe-numero'))$('#passe-numero').value=p.numero||'';
+  $('#passe-add').textContent=p.photo?'Reprendre la photo':'Prendre la photo';
+  $('#passe-big').hidden=$('#passe-del').hidden=!(p.photo||p.numero);$('#passe-big').hidden=!p.photo;
+}
+function savePasse(patch){const p={...(store.get(PASSE_KEY,{})||{}),...patch};try{localStorage.setItem(PASSE_KEY,JSON.stringify(p));return true;}catch(e){$('#passe-msg').textContent='Mémoire du téléphone pleine : la photo n’a pas pu être gardée.';return false;}}
+async function shrink(file,max=1400){
+  const url=URL.createObjectURL(file);
+  try{const img=await new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=ko;i.src=url;});
+    const r=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));const c=document.createElement('canvas');
+    c.width=Math.round(img.naturalWidth*r);c.height=Math.round(img.naturalHeight*r);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    return c.toDataURL('image/jpeg',.82);}finally{URL.revokeObjectURL(url);}
+}
+$('#passe-file').addEventListener('change',async e=>{
+  const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+  $('#passe-msg').textContent='Enregistrement…';
+  try{const d=await shrink(f);if(savePasse({photo:d,at:Date.now()}))$('#passe-msg').textContent='✓ Photo gardée sur ce téléphone. Recopiez aussi le numéro ci-dessus.';renderPasse();}
+  catch(err){$('#passe-msg').textContent='Cette image n’a pas pu être lue. Essayez une autre photo.';}
+});
+$('#passe-numero').addEventListener('input',e=>{savePasse({numero:e.target.value.trim()});$('#passe-del').hidden=false;});
+$('#passe-numero').addEventListener('blur',renderPasse);
+let passeDelArmed=false;
+$('#passe-del').addEventListener('click',()=>{const b=$('#passe-del');
+  if(!passeDelArmed){passeDelArmed=true;b.textContent='Touchez encore pour effacer';setTimeout(()=>{passeDelArmed=false;b.textContent='Effacer';},4000);return;}
+  passeDelArmed=false;b.textContent='Effacer';try{localStorage.removeItem(PASSE_KEY);}catch(e){}$('#passe-msg').textContent='Photo et numéro effacés.';renderPasse();});
+function zoomPasse(){const p=store.get(PASSE_KEY,{})||{};if(!p.photo)return;const z=document.createElement('div');z.className='passe-zoom';z.setAttribute('role','dialog');z.setAttribute('aria-label','Photo de ma passe de ski, touchez pour fermer');z.innerHTML=`<img src="${p.photo}" alt="Photo de ma passe de ski">`;z.addEventListener('click',()=>z.remove());document.body.appendChild(z);}
+$('#passe-big').addEventListener('click',zoomPasse);$('#passe-photo').addEventListener('click',zoomPasse);
+document.addEventListener('click',e=>{if(e.target.closest('[data-goto-passe]'))setTimeout(()=>$('#passe').scrollIntoView({behavior:'smooth',block:'start'}),80);});
+renderPasse();
+
 /* ---------- Bonnes adresses ---------- */
 const AD_CATS=[['restaurant','Restaurants sur les pistes'],['apres-ski','Après-ski et bars'],['pratique','Pratique']];
 const AD_KEY='solden-voyage-2027-adresses-cat-v1';
@@ -1603,7 +1660,7 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-goto-bag]'))set
 let wipeArmed=false;
 $('#wipe').addEventListener('click',async()=>{
   const b=$('#wipe');
-  if(!wipeArmed){wipeArmed=true;b.textContent='Touchez encore pour confirmer';$('#wipe-msg').textContent='Les cases cochées, le domaine choisi, la phrase du voyage et les copies hors ligne seront effacés. L’app restera installée.';setTimeout(()=>{if(wipeArmed){wipeArmed=false;b.textContent='Effacer mes données de cet appareil';$('#wipe-msg').textContent='';}},6000);return;}
+  if(!wipeArmed){wipeArmed=true;b.textContent='Touchez encore pour confirmer';$('#wipe-msg').textContent='Les cases cochées, le domaine choisi, la photo de la passe, la phrase du voyage et les copies hors ligne seront effacés. L’app restera installée.';setTimeout(()=>{if(wipeArmed){wipeArmed=false;b.textContent='Effacer mes données de cet appareil';$('#wipe-msg').textContent='';}},6000);return;}
   wipeArmed=false;
   try{Object.keys(localStorage).filter(k=>k.startsWith('solden-voyage-2027-')).forEach(k=>localStorage.removeItem(k));}catch(e){}
   try{if(window.caches){for(const k of await caches.keys()){const c=await caches.open(k);for(const r of await c.keys()){if(!r.url.startsWith(location.origin))await c.delete(r);}}}}catch(e){}
