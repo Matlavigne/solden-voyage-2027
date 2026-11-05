@@ -50,7 +50,7 @@ body:not(.on-accueil) .hero{min-height:118px}body:not(.on-accueil) .hero h1{font
 main{padding-top:14px}
 .view[hidden]{display:none}
 .view>h2{font-size:30px;margin:6px 0 14px}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:900;background:var(--white);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:1100;background:var(--white);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
 nav.tabs a{flex:1;min-width:0;height:var(--tab);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10.5px;letter-spacing:-.1px;color:var(--muted);text-decoration:none;position:relative}
 nav.tabs a svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav.tabs a[aria-current="page"]{color:var(--pine);font-weight:600}
@@ -209,7 +209,7 @@ body.locked{overflow:hidden}
 .passe-zoom{position:fixed;inset:0;z-index:2500;background:rgba(5,15,30,.94);display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top)) 12px 16px}
 .passe-zoom img{max-width:100%;max-height:100%;object-fit:contain}
 /* Carte */
-.mapbox{position:relative;height:calc(100vh - 290px);min-height:380px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#e4e9e0;margin:0 0 10px}
+.mapbox{position:relative;z-index:0;isolation:isolate;height:calc(100vh - 290px);min-height:380px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#e4e9e0;margin:0 0 10px}
 #map{position:absolute;inset:0}
 .mapbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
 .gps-info{font-size:13px;color:var(--muted);margin:0 0 10px;min-height:20px}
@@ -1126,7 +1126,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p style="margin-top:10px"><button type="button" class="light" id="wipe">Effacer mes données de cet appareil</button></p>
     <p class="small" id="wipe-msg"></p>
   </div>
-  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 18:14</span></p>
+  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 18:57</span></p>
 </section>
 </main>
 
