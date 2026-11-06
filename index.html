@@ -231,6 +231,12 @@ body.locked{overflow:hidden}
 .g-p{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--white);margin-bottom:6px}
 .g-p .n{font-weight:700}.g-p .ch{font-weight:700;text-align:right}.g-p .m{grid-column:1/-1;font-size:13px;color:var(--muted)}
 .g-p .acts{grid-column:1/-1;display:flex;gap:14px;font-size:14px;margin-top:2px}
+.pres-top{display:flex;gap:10px;align-items:center}.pres-top select{flex:1;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;min-width:0}
+.pres-new{display:flex;gap:8px;margin-top:8px}.pres-new input{flex:1;min-width:0;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px}
+.pres-count{font-size:20px;font-weight:800;margin:10px 0 8px}.pres-count .ok{color:#246b3c}.pres-count .ko{color:var(--red)}
+.p-row{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--white);margin-bottom:6px;cursor:pointer;user-select:none}
+.p-row input{width:26px;height:26px;flex:none;accent-color:#246b3c}.p-row.on{background:#eef7f0;border-color:#b7d8bf}
+.p-row .n{font-weight:700}.p-row .m{font-size:12px;color:var(--muted)}.p-row .t{margin-left:auto;font-size:13px;white-space:nowrap}
 /* Carte */
 .mapbox{position:relative;z-index:0;isolation:isolate;height:calc(100vh - 290px);min-height:380px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#e4e9e0;margin:0 0 10px}
 #map{position:absolute;inset:0}
@@ -1110,7 +1116,19 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div id="g-view" hidden>
     <div class="controls"><input id="g-q" type="search" placeholder="Chercher un nom, une chambre…" style="font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:10px;flex:1;min-width:0"><button type="button" class="light" id="g-lock">Verrouiller</button></div>
     <p class="small" id="g-sum"></p>
+    <div class="controls"><div class="seg" role="group" aria-label="Affichage"><button type="button" data-gmode="liste" aria-pressed="true">Liste</button><button type="button" data-gmode="pres" aria-pressed="false">Présences</button></div></div>
     <div id="g-list"></div>
+    <div id="g-pres" hidden>
+      <div class="card" style="padding:12px 14px">
+        <div class="pres-top"><label for="p-sel" class="small"><b>Appel</b></label><select id="p-sel"></select></div>
+        <div class="pres-new"><input id="p-nom" placeholder="Nouvel appel (ex. Bus vers l’aéroport)" autocomplete="off"><button type="button" id="p-new">Créer</button></div>
+      </div>
+      <div class="chips" id="p-grp" role="group" aria-label="Sous-groupe"></div>
+      <div class="pres-count" id="p-count" role="status" aria-live="polite"></div>
+      <div class="row" style="gap:8px;flex-wrap:wrap;display:flex;margin:0 0 10px"><button type="button" class="light" id="p-miss" aria-pressed="false">Seulement les absents</button><button type="button" class="light" id="p-reset">Tout décocher</button><button type="button" class="light" id="p-del">Supprimer cet appel</button></div>
+      <div id="p-list"></div>
+      <p class="small">Les présences sont gardées sur ce téléphone seulement : chaque accompagnateur fait son propre appel.</p>
+    </div>
   </div>
   <p class="foot"><a href="#infos">← Infos</a></p>
 </section>
@@ -1199,7 +1217,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p class="small" id="wipe-msg"></p>
   </div>
   <p class="small" style="text-align:center;margin-top:18px"><a href="#groupe" id="acc-link">Accès accompagnateur</a></p>
-  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 22:33</span></p>
+  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 22:56</span></p>
 </section>
 </main>
 
@@ -1505,7 +1523,10 @@ renderPasse();
 const KEY_GRP='solden-voyage-2027-cle-groupe-v1';
 let GRP=null,GRP_KEY=null;
 async function grpFetch(){const r=await fetch('groupe.json',{cache:'no-store'});if(r.status===404)return null;if(!r.ok)throw Error('HTTP '+r.status);return r.json();}
-async function grpOpen(file,key){const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(file.chiffre.iv)},key,unb64(file.chiffre.data));return JSON.parse(new TextDecoder().decode(pt));}
+async function grpOpen(file,key){const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(file.chiffre.iv)},key,unb64(file.chiffre.data));const g=JSON.parse(new TextDecoder().decode(pt));
+  // identifiant non réversible par personne (les présences ne gardent aucun nom sur le téléphone)
+  for(const p of (g.voyageurs||[])){const h=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normPhrase(p.nom)+'|'+String(p.chambre||''))));p._id=[...h.slice(0,6)].map(b=>b.toString(16).padStart(2,'0')).join('');}
+  return g;}
 async function grpStoredKey(c){const s0=store.get(KEY_GRP,null);if(!s0||s0.salt!==c.salt)return null;try{return await crypto.subtle.importKey('raw',unb64(s0.k),{name:'AES-GCM'},true,['decrypt']);}catch(e){return null;}}
 async function renderGroupe(){
   const f=$('#g-form'),vw=$('#g-view'),m=$('#g-msg');
@@ -1514,7 +1535,7 @@ async function renderGroupe(){
   GRP_KEY=GRP_KEY||await grpStoredKey(file.chiffre);
   if(GRP_KEY){try{GRP=await grpOpen(file,GRP_KEY);}catch(e){GRP=null;GRP_KEY=null;m.textContent='La clé accompagnateur a changé. Entrez la nouvelle.';}}
   if(!GRP){f.hidden=false;vw.hidden=true;f._file=file;return;}
-  f.hidden=true;vw.hidden=false;drawGroupe();
+  f.hidden=true;vw.hidden=false;drawGroupe();if(gMode==='pres')drawPres();
 }
 function drawGroupe(){
   const q=normPhrase($('#g-q').value).replace(/-/g,' ');
@@ -1533,7 +1554,40 @@ $('#g-form').addEventListener('submit',async e=>{e.preventDefault();const f=$('#
     if($('#g-keep').checked)store.set(KEY_GRP,{salt:file.chiffre.salt,k:tob64(new Uint8Array(await crypto.subtle.exportKey('raw',key)))});
     f.hidden=true;$('#g-view').hidden=false;drawGroupe();}
   catch(err){m.textContent='Clé incorrecte.';}});
-$('#g-q').addEventListener('input',()=>GRP&&drawGroupe());
+$('#g-q').addEventListener('input',()=>{if(!GRP)return;drawGroupe();if(gMode==='pres')drawPres();});
+/* Présences */
+const PRES_KEY='solden-voyage-2027-presences-v1';
+let gMode='liste',pGrp='',pMiss=false;
+const pState=()=>{const s0=store.get(PRES_KEY,null)||{};s0.appels=Array.isArray(s0.appels)?s0.appels:[];return s0;};
+const pSave=s0=>store.set(PRES_KEY,s0);
+const pDefNom=()=>'Appel du '+new Intl.DateTimeFormat('fr-CA',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date());
+function pCur(){const s0=pState();let a=s0.appels.find(x=>x.id===s0.cur);if(!a){a={id:Date.now().toString(36),nom:pDefNom(),at:Date.now(),coches:{}};s0.appels.unshift(a);s0.cur=a.id;pSave(s0);}return a;}
+function drawPres(){
+  const s0=pState(),a=pCur();
+  $('#p-sel').innerHTML=pState().appels.map(x=>`<option value="${esc(x.id)}"${x.id===a.id?' selected':''}>${esc(x.nom)}</option>`).join('');
+  const all=GRP.voyageurs||[];const grps=[...new Set(all.map(p=>p.sousGroupe||'').filter(Boolean))].sort((x,y)=>x.localeCompare(y,'fr',{numeric:true}));
+  if(pGrp&&!grps.includes(pGrp))pGrp='';
+  $('#p-grp').innerHTML=grps.length?[['','Tous'],...grps.map(g=>[g,g])].map(([k,l])=>`<button type="button" data-pgrp="${esc(k)}" aria-pressed="${k===pGrp}">${esc(l)}</button>`).join(''):'';
+  const q=normPhrase($('#g-q').value).replace(/-/g,' ');
+  const scope=all.filter(p=>!pGrp||p.sousGroupe===pGrp);
+  const here=scope.filter(p=>a.coches[p._id]).length,miss=scope.length-here;
+  $('#p-count').innerHTML=`<span class="${miss?'':'ok'}">${here} / ${scope.length} présents</span>${miss?` · <span class="ko">${miss} absent${miss>1?'s':''}</span>`:' ✓'}`;
+  const tel=t=>String(t||'').replace(/[^\d+]/g,'');
+  const rows=scope.filter(p=>(!pMiss||!a.coches[p._id])&&(!q||normPhrase([p.nom,p.chambre,p.sousGroupe].join(' ')).replace(/-/g,' ').includes(q))).sort((x,y)=>String(x.nom).localeCompare(String(y.nom),'fr'));
+  $('#p-list').innerHTML=rows.map(p=>{const on=!!a.coches[p._id];return `<label class="p-row${on?' on':''}"><input type="checkbox" data-pid="${esc(p._id)}"${on?' checked':''}><span><span class="n">${esc(p.nom||'')}</span><br><span class="m">${esc([p.sousGroupe,p.chambre?'ch. '+p.chambre:''].filter(Boolean).join(' · '))}</span></span>${!on&&p.telephone?`<a class="t" href="tel:${esc(tel(p.telephone))}">Appeler</a>`:''}</label>`;}).join('')||`<p class="small">${pMiss?'Personne d’absent. Tout le monde est là.':'Aucune personne.'}</p>`;
+  $('#p-miss').setAttribute('aria-pressed',pMiss);$('#p-miss').textContent=pMiss?'Afficher tout le monde':'Seulement les absents';
+}
+document.addEventListener('click',e=>{
+  const m=e.target.closest('[data-gmode]');if(m&&GRP){gMode=m.dataset.gmode;$$('[data-gmode]').forEach(b=>b.setAttribute('aria-pressed',b===m));$('#g-list').hidden=gMode!=='liste';$('#g-pres').hidden=gMode!=='pres';if(gMode==='pres')drawPres();return;}
+  const g=e.target.closest('[data-pgrp]');if(g){pGrp=g.dataset.pgrp;drawPres();}
+});
+document.addEventListener('change',e=>{const c=e.target.closest('[data-pid]');if(!c)return;const s0=pState();const a=s0.appels.find(x=>x.id===s0.cur);if(!a)return;if(c.checked)a.coches[c.dataset.pid]=Date.now();else delete a.coches[c.dataset.pid];pSave(s0);setTimeout(drawPres,pMiss?350:0);});
+$('#p-sel').addEventListener('change',e=>{const s0=pState();s0.cur=e.target.value;pSave(s0);drawPres();});
+$('#p-new').addEventListener('click',()=>{const s0=pState();const a={id:Date.now().toString(36),nom:$('#p-nom').value.trim()||pDefNom(),at:Date.now(),coches:{}};s0.appels.unshift(a);s0.appels=s0.appels.slice(0,30);s0.cur=a.id;pSave(s0);$('#p-nom').value='';pMiss=false;drawPres();});
+$('#p-miss').addEventListener('click',()=>{pMiss=!pMiss;drawPres();});
+let pArm={};const arm=(b,txt,fn)=>{if(!pArm[b.id]){pArm[b.id]=1;const o=b.textContent;b.textContent=txt;setTimeout(()=>{pArm[b.id]=0;b.textContent=o;},3500);return;}pArm[b.id]=0;fn();};
+$('#p-reset').addEventListener('click',e=>arm(e.target,'Touchez encore pour décocher',()=>{const s0=pState();const a=s0.appels.find(x=>x.id===s0.cur);if(a){a.coches={};pSave(s0);}e.target.textContent='Tout décocher';drawPres();}));
+$('#p-del').addEventListener('click',e=>arm(e.target,'Touchez encore pour supprimer',()=>{const s0=pState();s0.appels=s0.appels.filter(x=>x.id!==s0.cur);s0.cur=s0.appels[0]?.id;pSave(s0);e.target.textContent='Supprimer cet appel';drawPres();}));
 $('#g-lock').addEventListener('click',()=>{GRP=null;GRP_KEY=null;try{localStorage.removeItem(KEY_GRP);}catch(e){}$('#g-list').innerHTML='';$('#g-view').hidden=true;$('#g-form').hidden=true;renderGroupe();});
 
 /* ---------- Vols aller et retour ---------- */
