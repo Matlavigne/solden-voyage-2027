@@ -1,0 +1,10 @@
+{
+  "chiffre": {
+    "v": 1,
+    "kdf": "PBKDF2-SHA256",
+    "iter": 600000,
+    "salt": "l45FQxyZFrxXm9AQWIojMQ==",
+    "iv": "RQFdC2ZwPK1t08ZG",
+    "data": "h/xi4BOFYmBdmoMg2Ablqt794AB/pRn0NrDaMxyEwvA="
+  }
+}
