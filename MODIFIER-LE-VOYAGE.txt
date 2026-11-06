@@ -37,6 +37,9 @@ LIENS DU GROUPE (dans "liens") — WhatsApp, Facebook, etc.
     Facebook : ouvrir le groupe › Partager › Copier le lien
 
 AJOUTER UNE ANNONCE (dans "annonces")
+  Le plus simple : page d'édition › Annonces › « Partir d'un modèle » : Changement de rendez-vous,
+  Mauvais temps, Rappel de bagages (repris de la section Bagages), Rendez-vous de demain.
+  Remplacez les [mots entre crochets] : l'éditeur refuse de publier tant qu'il en reste.
     {
       "date": "2027-03-08T07:30",
       "fuseau": "Europe/Vienna",

@@ -329,7 +329,8 @@ const S=[
   {id:'depart',titre:'Compte à rebours (décollage)',type:'obj',key:'depart',help:'Le carré « J – » de l’Accueil compte jusqu’à cette heure.',fields:[['date','Date','date'],['heure','Heure','time'],['fuseau','Fuseau','tz']]},
   {id:'annonces',titre:'Annonces',type:'list',key:'annonces',sort:'desc',help:'Une annonce n’apparaît dans l’app qu’à partir de sa date et de son heure : vous pouvez les préparer d’avance.',
     label:a=>(a.date?a.date.replace('T',' · '):'sans date')+' — '+(a.texte||'').slice(0,50),newItem:()=>({date:nowLocal('Europe/Vienna'),fuseau:'Europe/Vienna',texte:''}),
-    fields:[['date','Publier à partir du','datetime'],['fuseau','Fuseau de cette heure','tz'],['texte','Texte de l’annonce','textarea','full']]},
+    fields:[['date','Publier à partir du','datetime'],['fuseau','Fuseau de cette heure','tz'],['texte','Texte de l’annonce','textarea','full']],
+    templates:[['rdv','Changement de rendez-vous'],['meteo','Mauvais temps'],['bagages','Rappel de bagages'],['demain','Rendez-vous de demain']]},
   {id:'vols',titre:'Vols aller et retour',type:'list',key:'vols',help:'Un bloc par vol, correspondances comprises. Heures locales de chaque aéroport, comme sur la confirmation. Le numéro de vol (ex. LX 87) active les liens de suivi en direct. Les vols s’affichent en haut du Programme, et sur l’Accueil à partir de 36 heures avant le départ. Un rappel d’enregistrement en ligne s’affiche, et s’ajoute au calendrier des voyageurs, à l’heure d’ouverture (24 h avant par défaut).',
     label:v=>({aller:'Aller',retour:'Retour',correspondance:'Correspondance'}[v.sens]||'Vol')+(v.numero?' · '+v.numero:'')+(v.date?' · '+v.date:''),
     newItem:()=>({sens:'aller',compagnie:'',numero:'',depart:'',date:'',heure:'',fuseau:'America/Montreal',arrivee:'',dateArrivee:'',heureArrivee:'',fuseauArrivee:'Europe/Zurich',terminal:'',enregistrementHeures:24,lienEnregistrement:'',enregistrementNote:'',note:''}),
@@ -368,6 +369,24 @@ const S=[
 const HANDLED=new Set(['titre','datesTexte','debut','fin','niveau','sousTitre',...S.filter(s=>s.key).map(s=>s.key)]);
 function nowLocal(tz){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return`${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;}
 
+/* ---------- Modèles d’annonces ---------- */
+const liste=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' et '+a[a.length-1];
+const TPL={
+  rdv:()=>'Changement de rendez-vous : [jour], le rendez-vous de [heure prévue] est déplacé à [nouvelle heure], [lieu]. Merci de faire suivre aux personnes de votre groupe qui n’ont pas vu ce message.',
+  meteo:()=>'Mauvais temps prévu [demain] : [vent fort / neige abondante / brouillard] en altitude. Certaines remontées pourraient fermer : vérifiez l’onglet Ski avant de partir. Le rendez-vous est [maintenu à … / déplacé à …]. Couvrez-vous bien : masque de ski, cache-cou et gants chauds.',
+  bagages:()=>{const b=V.bagages||{};const t=x=>(x||[]).map(i=>String(i.t||'').toLowerCase()).filter(Boolean);
+    const so=t(b.soute),ca=t(b.cabine);
+    const ns=String(b.noteSoute||'').split(/(?<=\.)\s/)[0].trim();
+    return 'Rappel bagages pour le vol de [jour] : '+(so.length?'en soute, '+liste(so):'en soute, [bagages]')+'. '+(ns?ns+(/[.!]$/.test(ns)?' ':'. '):'')+(ca.length?'En cabine, '+liste(ca)+'. ':'')+(b.important?String(b.important).trim().replace(/\s*$/,'')+(/[.!]$/.test(String(b.important).trim())?' ':'. '):'Les batteries et chargeurs portatifs vont en cabine, jamais en soute. ')+'Tous les détails sont dans l’app, onglet Infos.';},
+  demain:()=>'Demain [jour] : rendez-vous à [heure] à [lieu] pour [activité]. Forfait en main, casque et crème solaire. Bonne soirée!'
+};
+function tzNow(){const mtl=nowLocal('America/Montreal');return V.debut&&mtl.slice(0,10)<V.debut?'America/Montreal':'Europe/Vienna';}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-tpl]');if(!b||!V)return;
+  const tz=tzNow();if(!Array.isArray(V.annonces))V.annonces=[];
+  V.annonces.unshift({date:nowLocal(tz),fuseau:tz,texte:TPL[b.dataset.tpl]()});render();changed();
+  const sec=$('#s-annonces');sec.open=true;const ta=sec.querySelector('.item textarea');if(ta){ta.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>{ta.focus();const i=ta.value.indexOf('[');if(i>=0)ta.setSelectionRange(i,ta.value.indexOf(']',i)+1);},350);}
+});
+
 /* ---------- Accès par chemin ---------- */
 const getP=(o,p)=>p.reduce((a,k)=>a==null?undefined:a[k],o);
 function setP(o,p,v){let a=o;for(let i=0;i<p.length-1;i++){if(a[p[i]]==null)a[p[i]]=typeof p[i+1]==='number'?[]:{};a=a[p[i]];}a[p[p.length-1]]=v;}
@@ -402,7 +421,8 @@ function listHtml(path,cfg,arr){
     <button type="button" class="mini danger" data-act="del" data-p="${esc(JSON.stringify(p))}" aria-label="Supprimer">✕</button></div>
     <div class="bd"><div class="grid">${cfg.fields.map(f=>field(p,f,it)).join('')}</div>
     ${cfg.child?`<p class="help" style="margin-top:14px;font-weight:600;color:var(--ink)">${esc(cfg.child.titre)}</p>${listHtml([...p,cfg.child.key],cfg.child,it[cfg.child.key])}`:''}</div></div>`;}).join('');
-  return items+`<div class="addbar"><button type="button" class="light" data-act="add" data-p="${esc(JSON.stringify(path))}" data-cfg="${esc(cfgId(cfg))}">+ Ajouter</button></div>`;
+  return items+`<div class="addbar"><button type="button" class="light" data-act="add" data-p="${esc(JSON.stringify(path))}" data-cfg="${esc(cfgId(cfg))}">+ Ajouter</button></div>`
+    +(cfg.templates?`<p class="help" style="margin:12px 0 6px;font-weight:600;color:var(--ink)">Partir d’un modèle</p><div class="addbar tpl">${cfg.templates.map(([k,l])=>`<button type="button" class="light" data-tpl="${k}">${esc(l)}</button>`).join('')}</div><p class="help">Le modèle crée une annonce à publier maintenant. Remplacez les [mots entre crochets], ajustez l’heure de publication si besoin, puis « Publier ».</p>`:'');
 }
 const CFG={};function cfgId(c){const k=c.key+'|'+(c.titre||'');CFG[k]=c;return k;}
 function render(){
@@ -452,6 +472,7 @@ document.addEventListener('click',e=>{
 function validate(){
   const errs=[];const okD=s=>/^\d{4}-\d\d-\d\d$/.test(s||''),okT=s=>!s||/^\d\d:\d\d$/.test(s),okU=s=>!s||/^https?:\/\/\S+$/.test(s);
   if(!okD(V.debut)||!okD(V.fin))errs.push('Titre et dates : le premier et le dernier jour sont requis.');
+  (V.annonces||[]).forEach((a,i)=>{if(/\[[^\]]{1,60}\]/.test(a.texte||''))errs.push(`Annonce ${i+1} : remplacez les [mots entre crochets] du modèle.`);});
   (V.annonces||[]).forEach((a,i)=>{if(!/^\d{4}-\d\d-\d\dT\d\d:\d\d$/.test(a.date||''))errs.push(`Annonce ${i+1} : date et heure de publication requises.`);if(!(a.texte||'').trim())errs.push(`Annonce ${i+1} : le texte est vide.`);});
   (V.avantDepart||[]).forEach((a,i)=>{if(!okD(a.date))errs.push(`Avant le départ ${i+1} : date requise.`);if(!okT(a.heure))errs.push(`Avant le départ ${i+1} : heure invalide.`);if(!okU(a.lien))errs.push(`Avant le départ ${i+1} : le lien doit commencer par https://`);});
   (V.programme||[]).forEach((d,i)=>{if(!okD(d.date))errs.push(`Programme, jour ${i+1} : date requise.`);(d.items||[]).forEach((it,j)=>{if(!(it.titre||'').trim())errs.push(`Programme ${d.date||'jour '+(i+1)}, rendez-vous ${j+1} : titre requis.`);if(!okT(it.heure))errs.push(`Programme ${d.date}, rendez-vous ${j+1} : heure invalide.`);if(!okU(it.lien))errs.push(`Programme ${d.date}, rendez-vous ${j+1} : le lien doit commencer par https://`);});});
