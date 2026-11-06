@@ -241,7 +241,7 @@ $('#cx-test').onclick=()=>{saveCx();load();};
 $('#cx-forget').onclick=()=>{$('#cx-token').value='';saveCx();checkWrite();};
 
 /* ---------- Schéma des formulaires ---------- */
-const TZ=[['America/Montreal','Heure de Montréal'],['Europe/Vienna','Heure d’Autriche']];
+const TZ=[['America/Montreal','Heure de Montréal'],['Europe/Zurich','Heure de Zurich'],['Europe/Vienna','Heure d’Autriche']];
 const ITEM=[['heure','Heure','time'],['titre','Titre','text'],['lieu','Lieu','text'],['note','Note','textarea','full'],['lien','Lien (facultatif)','url'],['lienTexte','Texte du bouton du lien','text'],['rdv','Rendez-vous (compte à rebours sur l’Accueil)','bool'],['aConfirmer','Étiquette « À confirmer »','bool']];
 const S=[
   {id:'general',titre:'Titre et dates',type:'root',fields:[['titre','Titre affiché','text'],['datesTexte','Dates affichées','text'],['debut','Premier jour','date'],['fin','Dernier jour','date'],['niveau','Niveau du groupe','text'],['sousTitre','Sous-titre','text']]},
@@ -249,6 +249,14 @@ const S=[
   {id:'annonces',titre:'Annonces',type:'list',key:'annonces',sort:'desc',help:'Une annonce n’apparaît dans l’app qu’à partir de sa date et de son heure : vous pouvez les préparer d’avance.',
     label:a=>(a.date?a.date.replace('T',' · '):'sans date')+' — '+(a.texte||'').slice(0,50),newItem:()=>({date:nowLocal('Europe/Vienna'),fuseau:'Europe/Vienna',texte:''}),
     fields:[['date','Publier à partir du','datetime'],['fuseau','Fuseau de cette heure','tz'],['texte','Texte de l’annonce','textarea','full']]},
+  {id:'vols',titre:'Vols aller et retour',type:'list',key:'vols',help:'Un bloc par vol, correspondances comprises. Heures locales de chaque aéroport, comme sur la confirmation. Le numéro de vol (ex. LX 87) active les liens de suivi en direct. Les vols s’affichent en haut du Programme, et sur l’Accueil à partir de 36 heures avant le départ. Un rappel d’enregistrement en ligne s’affiche, et s’ajoute au calendrier des voyageurs, à l’heure d’ouverture (24 h avant par défaut).',
+    label:v=>({aller:'Aller',retour:'Retour',correspondance:'Correspondance'}[v.sens]||'Vol')+(v.numero?' · '+v.numero:'')+(v.date?' · '+v.date:''),
+    newItem:()=>({sens:'aller',compagnie:'',numero:'',depart:'',date:'',heure:'',fuseau:'America/Montreal',arrivee:'',dateArrivee:'',heureArrivee:'',fuseauArrivee:'Europe/Zurich',terminal:'',enregistrementHeures:24,lienEnregistrement:'',enregistrementNote:'',note:''}),
+    fields:[['sens','Type','select',[['aller','Aller'],['retour','Retour'],['correspondance','Correspondance']]],['numero','Numéro de vol (ex. LX 87)','text'],['compagnie','Compagnie','text'],['terminal','Terminal (facultatif)','text'],
+      ['depart','Départ (ex. YUL · Montréal-Trudeau)','text','full'],['date','Date de départ','date'],['heure','Heure de départ','time'],['fuseau','Fuseau du départ','tz'],
+      ['arrivee','Arrivée (ex. ZRH · Zurich)','text','full'],['dateArrivee','Date d’arrivée','date'],['heureArrivee','Heure d’arrivée','time'],['fuseauArrivee','Fuseau de l’arrivée','tz'],
+      ['enregistrementHeures','Enregistrement en ligne : ouvre combien d’heures avant (0 = pas de rappel)','number'],['lienEnregistrement','Lien d’enregistrement en ligne (site de la compagnie)','url'],['enregistrementNote','Précision sur l’enregistrement (facultatif)','text','full'],
+      ['note','Note (rendez-vous, bagages…)','textarea']]},
   {id:'avant',titre:'Avant le départ (réunion Teams…)',type:'list',key:'avantDepart',label:a=>(a.date||'')+' — '+(a.titre||''),newItem:()=>({date:'',fuseau:'America/Montreal',heure:'',titre:'',lieu:'',note:''}),fields:[['date','Date','date'],['fuseau','Fuseau','tz'],...ITEM]},
   {id:'programme',titre:'Programme jour par jour',type:'list',key:'programme',label:d=>(d.date||'')+' — '+(d.titre||''),newItem:()=>({date:'',fuseau:'Europe/Vienna',titre:'',items:[]}),
     fields:[['date','Date','date'],['fuseau','Fuseau','tz'],['titre','Titre du jour','text','full']],
@@ -282,7 +290,7 @@ function nowLocal(tz){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA'
 /* ---------- Accès par chemin ---------- */
 const getP=(o,p)=>p.reduce((a,k)=>a==null?undefined:a[k],o);
 function setP(o,p,v){let a=o;for(let i=0;i<p.length-1;i++){if(a[p[i]]==null)a[p[i]]=typeof p[i+1]==='number'?[]:{};a=a[p[i]];}a[p[p.length-1]]=v;}
-const tzNorm=v=>({'america/toronto':'America/Montreal','america/montreal':'America/Montreal','europe/vienna':'Europe/Vienna'})[String(v||'').toLowerCase()]||v||'';
+const tzNorm=v=>({'america/toronto':'America/Montreal','america/montreal':'America/Montreal','europe/vienna':'Europe/Vienna','europe/zurich':'Europe/Zurich'})[String(v||'').toLowerCase()]||v||'';
 
 /* ---------- Rendu ---------- */
 function field(path,[k,lab,type,extra,extra2],obj){
@@ -367,6 +375,7 @@ function validate(){
   (V.avantDepart||[]).forEach((a,i)=>{if(!okD(a.date))errs.push(`Avant le départ ${i+1} : date requise.`);if(!okT(a.heure))errs.push(`Avant le départ ${i+1} : heure invalide.`);if(!okU(a.lien))errs.push(`Avant le départ ${i+1} : le lien doit commencer par https://`);});
   (V.programme||[]).forEach((d,i)=>{if(!okD(d.date))errs.push(`Programme, jour ${i+1} : date requise.`);(d.items||[]).forEach((it,j)=>{if(!(it.titre||'').trim())errs.push(`Programme ${d.date||'jour '+(i+1)}, rendez-vous ${j+1} : titre requis.`);if(!okT(it.heure))errs.push(`Programme ${d.date}, rendez-vous ${j+1} : heure invalide.`);if(!okU(it.lien))errs.push(`Programme ${d.date}, rendez-vous ${j+1} : le lien doit commencer par https://`);});});
   (V.liens||[]).forEach((l,i)=>{if(!okU(l.url))errs.push(`Lien ${i+1} : doit commencer par https://`);});
+  (V.vols||[]).forEach((v,i)=>{if(!okD(v.date))errs.push(`Vol ${i+1} : date de départ requise.`);if(!okT(v.heure)||!okT(v.heureArrivee))errs.push(`Vol ${i+1} : heure invalide.`);if(v.dateArrivee&&!okD(v.dateArrivee))errs.push(`Vol ${i+1} : date d’arrivée invalide.`);if(!okU(v.lienEnregistrement))errs.push(`Vol ${i+1} : le lien d’enregistrement doit commencer par https://`);});
   if(V.sondage&&!okU(V.sondage.lien))errs.push('Sondage : le lien doit commencer par https://');
   (V.derniereRemontee||[]).forEach((r,i)=>{if(!okT(r.heure))errs.push(`Dernière remontée ${i+1} : heure invalide.`);});
   (V.lieux||[]).forEach((l,i)=>{if(typeof l.lat!=='number'||typeof l.lng!=='number'||isNaN(l.lat)||isNaN(l.lng))errs.push(`Lieu ${i+1} (${l.nom||'sans nom'}) : latitude et longitude requises.`);});

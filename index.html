@@ -218,6 +218,15 @@ body.locked{overflow:hidden}
 .share-panel .coords{font-size:18px;font-weight:700;letter-spacing:.3px}.share-panel .row{gap:8px;flex-wrap:wrap;margin-top:8px}
 .perso-grid{display:flex;flex-direction:column;gap:10px;margin-top:8px}.perso-grid label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
 .perso-grid input,.perso-grid textarea{font:inherit;font-size:16px;font-weight:400;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px}
+.vol{border-left:4px solid var(--pine)}.vol-hd{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.vol-hd b{font-size:16px}.vol-st{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--soft);color:var(--pine)}
+.vol-st.air{background:#e6f0fb;color:#13509f}.vol-st.soon{background:#fdf1f0;color:var(--red)}.vol-st.done{background:#e3f1e6;color:#246b3c}
+.vol-route{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin:10px 0 6px}
+.vol-route .ap{font-size:26px;font-weight:800;line-height:1}.vol-route .t{font-size:18px;font-weight:700}.vol-route .d{font-size:12px;color:var(--muted)}
+.vol-route .arr{text-align:right}.vol-route .mid{color:var(--muted);font-size:12px;text-align:center}
+.vol .row{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
+.ck{background:var(--soft);border-radius:12px;padding:10px 12px;margin-top:10px}.ck.open{background:#fdf3d8;border:1px solid #e0b44a}.ck p{margin:0 0 6px}
+.ck .row{display:flex;gap:8px;flex-wrap:wrap}
 /* Carte */
 .mapbox{position:relative;z-index:0;isolation:isolate;height:calc(100vh - 290px);min-height:380px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#e4e9e0;margin:0 0 10px}
 #map{position:absolute;inset:0}
@@ -970,6 +979,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <h2 id="t-accueil" class="sr-hide" style="position:absolute;left:-9999px">Accueil</h2>
   <div class="status-banner" id="banner"></div>
   <div class="card next" id="next" hidden></div>
+  <div id="home-vol"></div>
   <div class="card remontee" id="home-remontee" hidden></div>
   <div class="card sondage" id="home-sondage" hidden></div>
   <div id="annonces"></div>
@@ -988,9 +998,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <section class="view" id="v-programme" hidden aria-labelledby="t-programme">
   <h2 id="t-programme">Programme</h2>
   <p class="tz">Heures locales : heure de Montréal le jour du départ, heure d’Autriche ensuite (6 h de plus qu’à Montréal).</p>
+  <div id="vols"></div>
   <div id="pre"></div>
   <div id="days"></div>
-  <p><a class="btn light" id="ics" download="solden-2027.ics" href="#">Ajouter les rendez-vous à mon calendrier</a></p>
+  <p><a class="btn light" id="ics" download="solden-2027.ics" href="#">Ajouter les rendez-vous et les vols à mon calendrier</a></p>
+  <p class="small" style="margin-top:-6px">Le calendrier inclut un rappel à l’ouverture de l’enregistrement en ligne de chaque vol.</p>
   <p class="small">Le programme peut changer : les mises à jour apparaissent ici et dans les annonces.</p>
 </section>
 
@@ -1164,7 +1176,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p style="margin-top:10px"><button type="button" class="light" id="wipe">Effacer mes données de cet appareil</button></p>
     <p class="small" id="wipe-msg"></p>
   </div>
-  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 19:12</span></p>
+  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 22:29</span></p>
 </section>
 </main>
 
@@ -1320,7 +1332,7 @@ function renderHeader(){
 }
 
 /* ---------- Rendu : accueil ---------- */
-function renderHome(){if(LOCKED||!valid(V))return;try{renderRemontee();renderSondage();}catch(e){}
+function renderHome(){if(LOCKED||!valid(V))return;try{renderVols();renderRemontee();renderSondage();}catch(e){}
   const n=NOW(),{start,end}=tripBounds();const ti=todayIndex();
   let html;
   if(n<start){
@@ -1375,7 +1387,8 @@ function buildIcs(){
   const tx=s=>String(s||'').replace(/\\/g,'\\\\').replace(/[,;]/g,m=>'\\'+m).replace(/\n/g,'\\n');
   const stamp=u(new Date());
   const ev=allItems().filter(x=>x.at).map(x=>['BEGIN:VEVENT','UID:solden2027-'+x.di+'-'+x.ii+'@voyage','DTSTAMP:'+stamp,'DTSTART:'+u(x.at),'DTEND:'+u(new Date(x.at.getTime()+3600e3)),'SUMMARY:'+tx(x.titre),'LOCATION:'+tx(x.lieu),'DESCRIPTION:'+tx((x.note||'')+(x.aConfirmer?' (à confirmer)':'')),'END:VEVENT'].join('\r\n'));
-  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Voyage Solden 2027//FR','CALSCALE:GREGORIAN',...ev,'END:VCALENDAR'].join('\r\n');
+  let vev=[];try{vev=icsEvents(volsList());}catch(e){}
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Voyage Solden 2027//FR','CALSCALE:GREGORIAN',...ev,...vev,'END:VCALENDAR'].join('\r\n');
   const a=$('#ics');if(a._url)URL.revokeObjectURL(a._url);a._url=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.href=a._url;
 }
 
@@ -1464,6 +1477,60 @@ function zoomPasse(){const p=store.get(PASSE_KEY,{})||{};if(!p.photo)return;cons
 $('#passe-big').addEventListener('click',zoomPasse);$('#passe-photo').addEventListener('click',zoomPasse);
 document.addEventListener('click',e=>{if(e.target.closest('[data-goto-passe]'))setTimeout(()=>$('#passe').scrollIntoView({behavior:'smooth',block:'start'}),80);});
 renderPasse();
+
+/* ---------- Vols aller et retour ---------- */
+const SENS={aller:'Aller',retour:'Retour',correspondance:'Correspondance'};
+function volsList(){return (Array.isArray(V.vols)?V.vols:[]).map(v=>{
+  const dep=/^\d{4}-\d\d-\d\d$/.test(v.date||'')?zoned(v.date,v.heure||'00:00',v.fuseau||'America/Toronto'):null;
+  const arr=/^\d{4}-\d\d-\d\d$/.test(v.dateArrivee||v.date||'')&&v.heureArrivee?zoned(v.dateArrivee||v.date,v.heureArrivee,v.fuseauArrivee||'Europe/Vienna'):null;
+  return {...v,dep,arr,code:String(v.numero||'').replace(/\s+/g,'').toUpperCase()};}).filter(v=>v.dep).sort((a,b)=>a.dep-b.dep).map((v,i)=>({...v,idx:i}));}
+const tzNom=tz=>({'America/Toronto':'heure de Montréal','America/Montreal':'heure de Montréal','Europe/Vienna':'heure d’Autriche','Europe/Zurich':'heure de Zurich'})[tz]||'';
+function volState(v,n){
+  if(v.arr&&n>v.arr)return ['done','Arrivé (selon l’horaire)'];
+  if(n>=v.dep)return v.arr?['air','En vol (selon l’horaire)']:['air','Parti (selon l’horaire)'];
+  const h=(v.dep-n)/36e5;if(h<=24)return ['soon','Départ dans '+(h<1?Math.max(1,Math.round(h*60))+' min':Math.floor(h)+' h '+String(Math.round((h%1)*60)).padStart(2,'0'))];
+  return ['','Prévu'];
+}
+function volCard(v,n){
+  const [cls,txt]=volState(v,n);const dur=v.arr?Math.round((v.arr-v.dep)/6e4):null;
+  const ap=t=>esc(String(t||'').split(/[·\-–—,(]/)[0].trim()||'—');const apFull=t=>esc(String(t||'').replace(/^[A-Z]{3}\s*[·\-–—]\s*/,''));
+  const when=(d,tz)=>esc(fmt(d,tz,{hour:'2-digit',minute:'2-digit'}));const day=(d,tz)=>esc(fmt(d,tz,{weekday:'short',day:'numeric',month:'short'}));
+  const tzA=v.fuseau||'America/Toronto',tzB=v.fuseauArrivee||'Europe/Vienna';
+  return `<div class="card vol"><div class="vol-hd"><b>${esc(SENS[v.sens]||'Vol')}${v.code?' · '+esc(v.code.replace(/^([A-Z0-9]{2})(\d+)/,'$1 $2')):''}${v.compagnie?' · '+esc(v.compagnie):''}</b><span class="vol-st ${cls}">${esc(txt)}</span></div>
+  <div class="vol-route"><div><div class="ap">${ap(v.depart)}</div><div class="t">${when(v.dep,tzA)}</div><div class="d">${day(v.dep,tzA)}<br>${apFull(v.depart)}${tzNom(tzA)?' · '+tzNom(tzA):''}</div></div>
+  <div class="mid" aria-hidden="true">✈<br>${dur?Math.floor(dur/60)+' h '+String(dur%60).padStart(2,'0'):''}</div>
+  <div class="arr"><div class="ap">${ap(v.arrivee)}</div><div class="t">${v.arr?when(v.arr,tzB):'—'}</div><div class="d">${v.arr?day(v.arr,tzB):''}<br>${apFull(v.arrivee)}${v.arr&&tzNom(tzB)?' · '+tzNom(tzB):''}</div></div></div>
+  ${v.terminal?`<p class="small"><b>Terminal :</b> ${esc(v.terminal)}</p>`:''}${v.note?`<p class="small">${esc(v.note)}</p>`:''}${ckHtml(v,v.idx,n)}
+  ${v.code?`<div class="row small"><a href="https://www.flightaware.com/live/flight/${encodeURIComponent(v.code)}" target="_blank" rel="noopener">Suivre le vol en direct ↗</a><a href="https://www.flightradar24.com/data/flights/${encodeURIComponent(v.code.toLowerCase())}" target="_blank" rel="noopener">Flightradar24 ↗</a></div>`:''}</div>`;
+}
+const ckH=v=>{const h=Number(v.enregistrementHeures);return Number.isFinite(h)&&v.enregistrementHeures!==''&&v.enregistrementHeures!=null?h:24;};
+const ckOpen=v=>new Date(v.dep.getTime()-ckH(v)*36e5);
+function icsEvents(vs){
+  const pad=n=>String(n).padStart(2,'0'),u=d=>d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+pad(d.getUTCHours())+pad(d.getUTCMinutes())+'00Z';
+  const tx=x=>String(x||'').replace(/\\/g,'\\\\').replace(/[,;]/g,m=>'\\'+m).replace(/\n/g,'\\n');const st=u(new Date());const out=[];
+  vs.forEach((v,i)=>{const nom=(v.code?v.code+' ':'')+(String(v.depart||'').split(/[·\-–—,(]/)[0].trim())+' → '+(String(v.arrivee||'').split(/[·\-–—,(]/)[0].trim());
+    out.push('BEGIN:VEVENT','UID:solden2027-vol-'+i+'@voyage','DTSTAMP:'+st,'DTSTART:'+u(v.dep),'DTEND:'+u(v.arr||new Date(v.dep.getTime()+36e5)),'SUMMARY:'+tx('Vol '+nom),'DESCRIPTION:'+tx(v.note||''),'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+tx('Vol '+nom),'TRIGGER:-PT3H','END:VALARM','END:VEVENT');
+    if(ckH(v)>0){const o=ckOpen(v);out.push('BEGIN:VEVENT','UID:solden2027-enreg-'+i+'@voyage','DTSTAMP:'+st,'DTSTART:'+u(o),'DTEND:'+u(new Date(o.getTime()+30*6e4)),'SUMMARY:'+tx('Enregistrement en ligne : vol '+nom),'DESCRIPTION:'+tx((v.lienEnregistrement?v.lienEnregistrement+'\n':'')+(v.enregistrementNote||'')),...(v.lienEnregistrement?['URL:'+v.lienEnregistrement]:[]),'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+tx('Enregistrement ouvert : vol '+nom),'TRIGGER:PT0S','END:VALARM','END:VEVENT');}});
+  return out;
+}
+function downloadIcs(lines,name){const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Voyage Solden 2027//FR','CALSCALE:GREGORIAN',...lines,'END:VCALENDAR'].join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},4000);}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-ck-ics]');if(!b)return;const v=volsList()[+b.dataset.ckIcs];if(v)downloadIcs(icsEvents([v]).slice(0),'vol-'+(v.code||'voyage').toLowerCase()+'.ics');});
+function ckHtml(v,i,n,full){
+  if(ckH(v)<=0||n>=v.dep)return '';
+  const o=ckOpen(v),tz=v.fuseau||'America/Toronto',open=n>=o;
+  const quand=esc(fmt(o,tz,{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}))+(tzNom(tz)?' ('+tzNom(tz)+')':'');
+  const btn=v.lienEnregistrement&&/^https?:\/\//.test(v.lienEnregistrement)?`<a class="btn" href="${esc(v.lienEnregistrement)}" target="_blank" rel="noopener">S’enregistrer en ligne ↗</a>`:'';
+  const cal=`<button type="button" class="light" data-ck-ics="${i}">Rappel dans mon calendrier</button>`;
+  return `<div class="ck${open?' open':''}"><p><b>${open?'L’enregistrement en ligne est ouvert.':'Enregistrement en ligne'}</b> ${open?'Enregistrez-vous et gardez votre carte d’embarquement dans le téléphone.':'Il ouvre '+ckH(v)+' h avant le départ, '+quand+'.'}</p>${v.enregistrementNote?`<p class="small">${esc(v.enregistrementNote)}</p>`:''}<div class="row">${open?btn:cal}</div></div>`;
+}
+function renderVols(){
+  const n=NOW(),list=volsList();
+  $('#vols').innerHTML=list.length?`<p class="overline">Vos vols</p>${list.map(v=>volCard(v,n)).join('')}<p class="small" style="margin:-4px 0 16px">L’état affiché suit l’horaire prévu. Pour un retard ou un changement de porte, touchez « Suivre le vol en direct » ou consultez l’app de la compagnie.</p>`:'';
+  const cur=list.filter(v=>n>=new Date(Math.min(v.dep-36*36e5,ckOpen(v)-12*36e5))&&n<=new Date((v.arr||v.dep).getTime()+3*36e5));
+  $('#home-vol').innerHTML=cur.length?`<p class="overline">${cur.length>1?'Vos vols':'Votre vol'}</p>${cur.map(v=>volCard(v,n)).join('')}`:'';
+}
+setInterval(()=>{if(!document.hidden&&!LOCKED&&valid(V))renderVols();},60e3);
 
 /* ---------- Neige (estimations Open-Meteo) ---------- */
 function renderNeige(){

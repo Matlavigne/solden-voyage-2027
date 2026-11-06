@@ -101,6 +101,14 @@ RÈGLES JSON À RESPECTER
   - Virgule entre deux éléments, jamais après le dernier d'une liste
   - Pas de guillemet " à l'intérieur d'un texte : utilisez « » ou ’
 
+VOLS ALLER ET RETOUR (section « Vols aller et retour » de l'éditeur)
+  Un bloc par vol (correspondances comprises) : numéro (ex. LX 87), compagnie, départ et arrivée
+  (ex. « YUL · Montréal-Trudeau »), dates, heures locales de chaque aéroport et leur fuseau.
+  Les vols s'affichent en haut du Programme, et sur l'Accueil à partir de 36 h avant le départ,
+  avec un compte à rebours et des liens de suivi en direct (FlightAware, Flightradar24).
+  Rappel d'enregistrement : « ouvre combien d'heures avant » (24 par défaut, 0 = aucun rappel) et le lien
+  d'enregistrement de la compagnie. Le rappel s'affiche sur l'Accueil et s'ajoute au calendrier des voyageurs.
+
 DERNIÈRE REMONTÉE (section « Dernière remontée » de l'éditeur)
   Une ligne par domaine : heure d'Autriche + précision (ex. « Gaislachkogl ou Giggijoch vers le village »).
   Pendant le séjour, l'heure s'affiche dans l'onglet Ski; dès midi, un compte à rebours apparaît sur
