@@ -227,6 +227,10 @@ body.locked{overflow:hidden}
 .vol .row{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
 .ck{background:var(--soft);border-radius:12px;padding:10px 12px;margin-top:10px}.ck.open{background:#fdf3d8;border:1px solid #e0b44a}.ck p{margin:0 0 6px}
 .ck .row{display:flex;gap:8px;flex-wrap:wrap}
+.g-grp{margin:14px 0 6px;font-weight:700;color:var(--pine)}
+.g-p{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--white);margin-bottom:6px}
+.g-p .n{font-weight:700}.g-p .ch{font-weight:700;text-align:right}.g-p .m{grid-column:1/-1;font-size:13px;color:var(--muted)}
+.g-p .acts{grid-column:1/-1;display:flex;gap:14px;font-size:14px;margin-top:2px}
 /* Carte */
 .mapbox{position:relative;z-index:0;isolation:isolate;height:calc(100vh - 290px);min-height:380px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#e4e9e0;margin:0 0 10px}
 #map{position:absolute;inset:0}
@@ -1093,6 +1097,24 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </section>
 
 <!-- INFOS -->
+<section class="view" id="v-groupe" hidden aria-labelledby="t-groupe">
+  <h2 id="t-groupe">Mon groupe</h2>
+  <p class="small">Réservé à l’accompagnateur. La liste est chiffrée avec la clé accompagnateur; les voyageurs ne peuvent pas la lire.</p>
+  <form class="card" id="g-form" autocomplete="off" hidden>
+    <label for="g-in"><b>Clé accompagnateur</b></label>
+    <input id="g-in" type="password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" style="font:inherit;font-size:17px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;width:100%;box-sizing:border-box;margin:8px 0">
+    <label class="small" style="display:flex;gap:6px;align-items:center;margin-bottom:10px"><input type="checkbox" id="g-keep" checked> Garder sur ce téléphone (pour l’ouvrir hors ligne)</label>
+    <button type="submit">Ouvrir la liste</button>
+    <p class="small" id="g-msg" role="status"></p>
+  </form>
+  <div id="g-view" hidden>
+    <div class="controls"><input id="g-q" type="search" placeholder="Chercher un nom, une chambre…" style="font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:10px;flex:1;min-width:0"><button type="button" class="light" id="g-lock">Verrouiller</button></div>
+    <p class="small" id="g-sum"></p>
+    <div id="g-list"></div>
+  </div>
+  <p class="foot"><a href="#infos">← Infos</a></p>
+</section>
+
 <section class="view" id="v-infos" hidden aria-labelledby="t-infos">
   <h2 id="t-infos">Infos pratiques</h2>
   <div class="card" id="contact"></div>
@@ -1176,7 +1198,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p style="margin-top:10px"><button type="button" class="light" id="wipe">Effacer mes données de cet appareil</button></p>
     <p class="small" id="wipe-msg"></p>
   </div>
-  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 22:29</span></p>
+  <p class="small" style="text-align:center;margin-top:18px"><a href="#groupe" id="acc-link">Accès accompagnateur</a></p>
+  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 22:33</span></p>
 </section>
 </main>
 
@@ -1477,6 +1500,41 @@ function zoomPasse(){const p=store.get(PASSE_KEY,{})||{};if(!p.photo)return;cons
 $('#passe-big').addEventListener('click',zoomPasse);$('#passe-photo').addEventListener('click',zoomPasse);
 document.addEventListener('click',e=>{if(e.target.closest('[data-goto-passe]'))setTimeout(()=>$('#passe').scrollIntoView({behavior:'smooth',block:'start'}),80);});
 renderPasse();
+
+/* ---------- Accès accompagnateur : liste du groupe (groupe.json, clé distincte) ---------- */
+const KEY_GRP='solden-voyage-2027-cle-groupe-v1';
+let GRP=null,GRP_KEY=null;
+async function grpFetch(){const r=await fetch('groupe.json',{cache:'no-store'});if(r.status===404)return null;if(!r.ok)throw Error('HTTP '+r.status);return r.json();}
+async function grpOpen(file,key){const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(file.chiffre.iv)},key,unb64(file.chiffre.data));return JSON.parse(new TextDecoder().decode(pt));}
+async function grpStoredKey(c){const s0=store.get(KEY_GRP,null);if(!s0||s0.salt!==c.salt)return null;try{return await crypto.subtle.importKey('raw',unb64(s0.k),{name:'AES-GCM'},true,['decrypt']);}catch(e){return null;}}
+async function renderGroupe(){
+  const f=$('#g-form'),vw=$('#g-view'),m=$('#g-msg');
+  let file;try{file=await grpFetch();}catch(e){f.hidden=false;vw.hidden=true;m.textContent='Connectez-vous à Internet une première fois pour charger la liste.';return;}
+  if(!file||!file.chiffre){f.hidden=true;vw.hidden=false;$('#g-sum').textContent='Aucune liste publiée pour l’instant. Ajoutez-la dans la page d’édition, section « Liste du groupe ».';$('#g-list').innerHTML='';return;}
+  GRP_KEY=GRP_KEY||await grpStoredKey(file.chiffre);
+  if(GRP_KEY){try{GRP=await grpOpen(file,GRP_KEY);}catch(e){GRP=null;GRP_KEY=null;m.textContent='La clé accompagnateur a changé. Entrez la nouvelle.';}}
+  if(!GRP){f.hidden=false;vw.hidden=true;f._file=file;return;}
+  f.hidden=true;vw.hidden=false;drawGroupe();
+}
+function drawGroupe(){
+  const q=normPhrase($('#g-q').value).replace(/-/g,' ');
+  const L=(GRP.voyageurs||[]).filter(p=>!q||normPhrase([p.nom,p.chambre,p.sousGroupe,p.niveau,p.notes].join(' ')).replace(/-/g,' ').includes(q));
+  const by={};L.forEach(p=>{(by[p.sousGroupe||'Sans sous-groupe']=by[p.sousGroupe||'Sans sous-groupe']||[]).push(p);});
+  const niv={};(GRP.voyageurs||[]).forEach(p=>{if(p.niveau)niv[p.niveau]=(niv[p.niveau]||0)+1;});
+  $('#g-sum').textContent=(GRP.voyageurs||[]).length+' personnes'+(Object.keys(niv).length?' · '+Object.entries(niv).map(([k,v])=>v+' '+k.toLowerCase()).join(', '):'');
+  const tel=t=>String(t||'').replace(/[^\d+]/g,'');
+  $('#g-list').innerHTML=Object.keys(by).sort((a,b)=>a.localeCompare(b,'fr',{numeric:true})).map(g=>`<p class="g-grp">${esc(g)} · ${by[g].length}</p>`+by[g].sort((a,b)=>String(a.nom).localeCompare(String(b.nom),'fr')).map(p=>`<div class="g-p"><span class="n">${esc(p.nom||'')}</span><span class="ch">${p.chambre?'Ch. '+esc(p.chambre):''}</span><span class="m">${esc([p.niveau,p.notes].filter(Boolean).join(' · '))}</span>${p.telephone?`<span class="acts"><a href="tel:${esc(tel(p.telephone))}">Appeler ${esc(p.telephone)}</a><a href="https://wa.me/${esc(tel(p.telephone).replace(/^\+/,''))}" target="_blank" rel="noopener">WhatsApp</a></span>`:''}</div>`).join('')).join('')||'<p class="small">Aucun résultat.</p>';
+}
+$('#g-form').addEventListener('submit',async e=>{e.preventDefault();const f=$('#g-form'),m=$('#g-msg');const file=f._file;if(!file){renderGroupe();return;}
+  m.textContent='Vérification…';
+  try{const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(normPhrase($('#g-in').value)),'PBKDF2',false,['deriveKey']);
+    const key=await crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:unb64(file.chiffre.salt),iterations:file.chiffre.iter||600000},base,{name:'AES-GCM',length:256},true,['decrypt']);
+    GRP=await grpOpen(file,key);GRP_KEY=key;$('#g-in').value='';m.textContent='';
+    if($('#g-keep').checked)store.set(KEY_GRP,{salt:file.chiffre.salt,k:tob64(new Uint8Array(await crypto.subtle.exportKey('raw',key)))});
+    f.hidden=true;$('#g-view').hidden=false;drawGroupe();}
+  catch(err){m.textContent='Clé incorrecte.';}});
+$('#g-q').addEventListener('input',()=>GRP&&drawGroupe());
+$('#g-lock').addEventListener('click',()=>{GRP=null;GRP_KEY=null;try{localStorage.removeItem(KEY_GRP);}catch(e){}$('#g-list').innerHTML='';$('#g-view').hidden=true;$('#g-form').hidden=true;renderGroupe();});
 
 /* ---------- Vols aller et retour ---------- */
 const SENS={aller:'Aller',retour:'Retour',correspondance:'Correspondance'};
@@ -1848,6 +1906,7 @@ function show(tab){
   $$('.view').forEach(v=>v.hidden=v.id!=='v-'+tab);
   $$('nav.tabs a').forEach(a=>{if(a.dataset.tab===tab)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   if(tab==='carte'){initMap();setTimeout(()=>map&&map.invalidateSize(),30);}else stopGps();
+  if(tab==='groupe')renderGroupe();
   if(tab==='ski'){renderPlan(true);renderRemontee();if(!wx||Date.now()-wx.fetched>30*60e3||!(wx.data?.[0]?.hourly?.snow_depth))loadWx();else renderNeige();}
   if(tab==='ski'&&(Date.now()-etatFetched()>5*60e3||Object.keys(etatLive).length<2))loadEtat();
   if(tab==='meteo')renderCams();

@@ -130,9 +130,21 @@ PHRASE DU VOYAGE (accès protégé)
     fichier de sauvegarde. Gardez-la avec votre jeton GitHub.
   - Modifier voyage.json à la main sur GitHub n'est plus possible quand il est chiffré : passez par l'éditeur.
 
+LISTE DU GROUPE (accompagnateur seulement)
+  Section « Liste du groupe » de l'éditeur : nom, chambre, niveau, sous-groupe de ski, téléphone, notes.
+  « Coller une liste » accepte un copier-coller d'Excel (Nom, Chambre, Niveau, Sous-groupe, Téléphone, Notes).
+  - Chiffrée avec une CLÉ ACCOMPAGNATEUR distincte de la phrase du voyage, dans le fichier groupe.json.
+    Les voyageurs n'ont jamais cette clé : ils ne peuvent pas lire la liste.
+  - « Générer une clé forte » (20 caractères). Gardez-la dans votre gestionnaire de mots de passe.
+  - Dans l'app : Infos › « Accès accompagnateur » (tout en bas), entrez la clé une fois.
+    « Verrouiller » retire la clé du téléphone.
+  - Pas de renseignements de santé dans les notes. Avant de publier, validez avec Gendron l'usage
+    de la liste des clients.
+
 CONFIDENTIALITÉ
   L'adresse de l'app est publique : aucun nom de voyageur, numéro de chambre,
-  de téléphone personnel ou de réservation dans voyage.json.
+  de téléphone personnel ou de réservation dans voyage.json. Ces renseignements vont seulement
+  dans la Liste du groupe, chiffrée avec la clé accompagnateur.
   Un lien d'invitation WhatsApp/Facebook permet à quiconque l'a de demander à rejoindre :
   activez l'approbation des membres dans les réglages du groupe.
 
