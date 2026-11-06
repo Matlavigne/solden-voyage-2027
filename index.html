@@ -1217,7 +1217,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p class="small" id="wipe-msg"></p>
   </div>
   <p class="small" style="text-align:center;margin-top:18px"><a href="#groupe" id="acc-link">Accès accompagnateur</a></p>
-  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 22:56</span></p>
+  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 23:15</span></p>
 </section>
 </main>
 
@@ -1519,6 +1519,8 @@ $('#passe-big').addEventListener('click',zoomPasse);$('#passe-photo').addEventLi
 document.addEventListener('click',e=>{if(e.target.closest('[data-goto-passe]'))setTimeout(()=>$('#passe').scrollIntoView({behavior:'smooth',block:'start'}),80);});
 renderPasse();
 
+// Numéro WhatsApp : chiffres seulement; un numéro nord-américain à 10 chiffres reçoit l’indicatif 1
+const waNum=t=>{const raw=String(t||'');const d=raw.replace(/\D/g,'');return !raw.trim().startsWith('+')&&d.length===10?'1'+d:d;};
 /* ---------- Accès accompagnateur : liste du groupe (groupe.json, clé distincte) ---------- */
 const KEY_GRP='solden-voyage-2027-cle-groupe-v1';
 let GRP=null,GRP_KEY=null;
@@ -1544,7 +1546,7 @@ function drawGroupe(){
   const niv={};(GRP.voyageurs||[]).forEach(p=>{if(p.niveau)niv[p.niveau]=(niv[p.niveau]||0)+1;});
   $('#g-sum').textContent=(GRP.voyageurs||[]).length+' personnes'+(Object.keys(niv).length?' · '+Object.entries(niv).map(([k,v])=>v+' '+k.toLowerCase()).join(', '):'');
   const tel=t=>String(t||'').replace(/[^\d+]/g,'');
-  $('#g-list').innerHTML=Object.keys(by).sort((a,b)=>a.localeCompare(b,'fr',{numeric:true})).map(g=>`<p class="g-grp">${esc(g)} · ${by[g].length}</p>`+by[g].sort((a,b)=>String(a.nom).localeCompare(String(b.nom),'fr')).map(p=>`<div class="g-p"><span class="n">${esc(p.nom||'')}</span><span class="ch">${p.chambre?'Ch. '+esc(p.chambre):''}</span><span class="m">${esc([p.niveau,p.notes].filter(Boolean).join(' · '))}</span>${p.telephone?`<span class="acts"><a href="tel:${esc(tel(p.telephone))}">Appeler ${esc(p.telephone)}</a><a href="https://wa.me/${esc(tel(p.telephone).replace(/^\+/,''))}" target="_blank" rel="noopener">WhatsApp</a></span>`:''}</div>`).join('')).join('')||'<p class="small">Aucun résultat.</p>';
+  $('#g-list').innerHTML=Object.keys(by).sort((a,b)=>a.localeCompare(b,'fr',{numeric:true})).map(g=>`<p class="g-grp">${esc(g)} · ${by[g].length}</p>`+by[g].sort((a,b)=>String(a.nom).localeCompare(String(b.nom),'fr')).map(p=>`<div class="g-p"><span class="n">${esc(p.nom||'')}</span><span class="ch">${p.chambre?'Ch. '+esc(p.chambre):''}</span><span class="m">${esc([p.niveau,p.notes].filter(Boolean).join(' · '))}</span>${p.telephone?`<span class="acts"><a href="tel:${esc(tel(p.telephone))}">Appeler ${esc(p.telephone)}</a><a href="https://wa.me/${esc(waNum(p.telephone))}" target="_blank" rel="noopener">WhatsApp</a></span>`:''}</div>`).join('')).join('')||'<p class="small">Aucun résultat.</p>';
 }
 $('#g-form').addEventListener('submit',async e=>{e.preventDefault();const f=$('#g-form'),m=$('#g-msg');const file=f._file;if(!file){renderGroupe();return;}
   m.textContent='Vérification…';
@@ -1574,7 +1576,7 @@ function drawPres(){
   $('#p-count').innerHTML=`<span class="${miss?'':'ok'}">${here} / ${scope.length} présents</span>${miss?` · <span class="ko">${miss} absent${miss>1?'s':''}</span>`:' ✓'}`;
   const tel=t=>String(t||'').replace(/[^\d+]/g,'');
   const rows=scope.filter(p=>(!pMiss||!a.coches[p._id])&&(!q||normPhrase([p.nom,p.chambre,p.sousGroupe].join(' ')).replace(/-/g,' ').includes(q))).sort((x,y)=>String(x.nom).localeCompare(String(y.nom),'fr'));
-  $('#p-list').innerHTML=rows.map(p=>{const on=!!a.coches[p._id];return `<label class="p-row${on?' on':''}"><input type="checkbox" data-pid="${esc(p._id)}"${on?' checked':''}><span><span class="n">${esc(p.nom||'')}</span><br><span class="m">${esc([p.sousGroupe,p.chambre?'ch. '+p.chambre:''].filter(Boolean).join(' · '))}</span></span>${!on&&p.telephone?`<a class="t" href="tel:${esc(tel(p.telephone))}">Appeler</a>`:''}</label>`;}).join('')||`<p class="small">${pMiss?'Personne d’absent. Tout le monde est là.':'Aucune personne.'}</p>`;
+  $('#p-list').innerHTML=rows.map(p=>{const on=!!a.coches[p._id];return `<label class="p-row${on?' on':''}"><input type="checkbox" data-pid="${esc(p._id)}"${on?' checked':''}><span><span class="n">${esc(p.nom||'')}</span><br><span class="m">${esc([p.sousGroupe,p.chambre?'ch. '+p.chambre:''].filter(Boolean).join(' · '))}</span></span>${!on&&p.telephone?`<span class="t"><a href="tel:${esc(tel(p.telephone))}">Appeler</a> · <a href="https://wa.me/${esc(waNum(p.telephone))}" target="_blank" rel="noopener">WhatsApp</a></span>`:''}</label>`;}).join('')||`<p class="small">${pMiss?'Personne d’absent. Tout le monde est là.':'Aucune personne.'}</p>`;
   $('#p-miss').setAttribute('aria-pressed',pMiss);$('#p-miss').textContent=pMiss?'Afficher tout le monde':'Seulement les absents';
 }
 document.addEventListener('click',e=>{
