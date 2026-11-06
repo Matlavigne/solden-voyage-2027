@@ -101,6 +101,15 @@ RÈGLES JSON À RESPECTER
   - Virgule entre deux éléments, jamais après le dernier d'une liste
   - Pas de guillemet " à l'intérieur d'un texte : utilisez « » ou ’
 
+DERNIÈRE REMONTÉE (section « Dernière remontée » de l'éditeur)
+  Une ligne par domaine : heure d'Autriche + précision (ex. « Gaislachkogl ou Giggijoch vers le village »).
+  Pendant le séjour, l'heure s'affiche dans l'onglet Ski; dès midi, un compte à rebours apparaît sur
+  l'Accueil, en rouge 45 minutes avant. Confirmez les heures sur place.
+
+SONDAGE DE FIN DE VOYAGE (section « Sondage de fin de voyage »)
+  Collez le lien d'un court formulaire (Google Forms, Microsoft Forms…). Une carte « Votre avis » apparaît
+  sur l'Accueil à partir du dernier jour (ou de la date choisie), pendant 30 jours.
+
 PHRASE DU VOYAGE (accès protégé)
   Page d'édition › section « Phrase du voyage » : entrez une phrase de 3 mots (ou « Proposer une phrase »),
   puis « Publier ». Le contenu est alors chiffré : sans la phrase, voyage.json est illisible.

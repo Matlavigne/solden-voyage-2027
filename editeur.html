@@ -262,6 +262,9 @@ const S=[
   {id:'infosSki',titre:'Infos ski',type:'rootlines',key:'infosSki',label:'Une info par ligne'},
   {id:'lieux',titre:'Lieux sur la carte',type:'list',key:'lieux',help:'Coordonnées : appui long sur le lieu dans Google Maps ou Plans, puis copiez les deux nombres.',label:l=>l.nom||'',newItem:()=>({id:'lieu'+Date.now().toString(36).slice(-4),nom:'',detail:'',lat:null,lng:null}),
     fields:[['nom','Nom','text'],['detail','Détail','text'],['lat','Latitude','number'],['lng','Longitude','number']]},
+  {id:'remontee',titre:'Dernière remontée',type:'list',key:'derniereRemontee',help:'Pendant le séjour, l’heure s’affiche dans l’onglet Ski, et l’après-midi un compte à rebours apparaît sur l’Accueil (en rouge 45 minutes avant). Heure d’Autriche. Vérifiez les heures sur place.',label:r=>(r.domaine==='gurgl'?'Gurgl':'Sölden')+(r.heure?' · '+r.heure:''),newItem:()=>({domaine:'soelden',heure:'',texte:''}),
+    fields:[['domaine','Domaine','select',[['soelden','Sölden'],['gurgl','Obergurgl-Hochgurgl']]],['heure','Heure de la dernière remontée','time'],['texte','Précision (quelle remontée, vers où)','text','full']]},
+  {id:'sondage',titre:'Sondage de fin de voyage',type:'obj',key:'sondage',help:'Créez un court formulaire (Google Forms, Microsoft Forms…) et collez son lien. Une carte apparaît sur l’Accueil à partir de la date choisie (par défaut le dernier jour), pendant 30 jours après le voyage.',fields:[['lien','Lien du formulaire','url','full'],['titre','Titre (facultatif)','text'],['date','À partir du (facultatif)','date'],['texte','Texte (facultatif)','textarea']]},
   {id:'adresses',titre:'Bonnes adresses : restos, après-ski, bars',type:'list',key:'adresses',help:'Affichées dans l’onglet Sortir, selon le domaine choisi par le voyageur. Les « coups de cœur » passent en premier avec une étoile. Avec une latitude et une longitude, l’adresse apparaît aussi sur la carte.',
     label:a=>(a.coupDeCoeur?'★ ':'')+(a.nom||'Nouvelle adresse')+(a.domaine?' · '+(a.domaine==='gurgl'?'Gurgl':'Sölden'):''),
     newItem:()=>({nom:'',categories:['restaurant'],domaine:'soelden',secteur:'',description:'',acces:'',infos:'',tags:[],lien:'',lienTexte:'',coupDeCoeur:false,lat:null,lng:null}),
@@ -364,6 +367,8 @@ function validate(){
   (V.avantDepart||[]).forEach((a,i)=>{if(!okD(a.date))errs.push(`Avant le départ ${i+1} : date requise.`);if(!okT(a.heure))errs.push(`Avant le départ ${i+1} : heure invalide.`);if(!okU(a.lien))errs.push(`Avant le départ ${i+1} : le lien doit commencer par https://`);});
   (V.programme||[]).forEach((d,i)=>{if(!okD(d.date))errs.push(`Programme, jour ${i+1} : date requise.`);(d.items||[]).forEach((it,j)=>{if(!(it.titre||'').trim())errs.push(`Programme ${d.date||'jour '+(i+1)}, rendez-vous ${j+1} : titre requis.`);if(!okT(it.heure))errs.push(`Programme ${d.date}, rendez-vous ${j+1} : heure invalide.`);if(!okU(it.lien))errs.push(`Programme ${d.date}, rendez-vous ${j+1} : le lien doit commencer par https://`);});});
   (V.liens||[]).forEach((l,i)=>{if(!okU(l.url))errs.push(`Lien ${i+1} : doit commencer par https://`);});
+  if(V.sondage&&!okU(V.sondage.lien))errs.push('Sondage : le lien doit commencer par https://');
+  (V.derniereRemontee||[]).forEach((r,i)=>{if(!okT(r.heure))errs.push(`Dernière remontée ${i+1} : heure invalide.`);});
   (V.lieux||[]).forEach((l,i)=>{if(typeof l.lat!=='number'||typeof l.lng!=='number'||isNaN(l.lat)||isNaN(l.lng))errs.push(`Lieu ${i+1} (${l.nom||'sans nom'}) : latitude et longitude requises.`);});
   if($('#raw')?.parentNode.classList.contains('bad'))errs.push('Section Avancé : erreur de format à corriger.');
   return errs;

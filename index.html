@@ -208,6 +208,16 @@ body.locked{overflow:hidden}
 .passe-acts{gap:8px;flex-wrap:wrap}.passe-acts [hidden]{display:none!important}
 .passe-zoom{position:fixed;inset:0;z-index:2500;background:rgba(5,15,30,.94);display:flex;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top)) 12px 16px}
 .passe-zoom img{max-width:100%;max-height:100%;object-fit:contain}
+.remontee{border-left:4px solid var(--pine)}.remontee.soon{border-left-color:var(--red);background:#fdf1f0}.remontee .when{font-size:22px;font-weight:700;margin:2px 0}
+.sondage{border-left:4px solid #e0b44a}
+.aval{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+.neige-pt{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.neige-pt:last-child{border-bottom:0}
+.neige-pt b{font-size:18px}.neige-pt .small{text-align:right}
+.sharepos{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
+.share-panel{background:var(--soft);border-radius:12px;padding:12px 14px;margin:0 0 12px}.share-panel[hidden]{display:none}
+.share-panel .coords{font-size:18px;font-weight:700;letter-spacing:.3px}.share-panel .row{gap:8px;flex-wrap:wrap;margin-top:8px}
+.perso-grid{display:flex;flex-direction:column;gap:10px;margin-top:8px}.perso-grid label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.perso-grid input,.perso-grid textarea{font:inherit;font-size:16px;font-weight:400;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px}
 /* Carte */
 .mapbox{position:relative;z-index:0;isolation:isolate;height:calc(100vh - 290px);min-height:380px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#e4e9e0;margin:0 0 10px}
 #map{position:absolute;inset:0}
@@ -960,6 +970,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <h2 id="t-accueil" class="sr-hide" style="position:absolute;left:-9999px">Accueil</h2>
   <div class="status-banner" id="banner"></div>
   <div class="card next" id="next" hidden></div>
+  <div class="card remontee" id="home-remontee" hidden></div>
+  <div class="card sondage" id="home-sondage" hidden></div>
   <div id="annonces"></div>
   <div class="card bag-home" id="home-bag" hidden></div>
   <div class="card" id="home-links" hidden><h3>Rejoindre le groupe</h3><div class="links" data-links></div></div>
@@ -1017,6 +1029,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div class="planbox"><iframe id="plan-frame" title="Plan officiel des pistes et remontées (Internet nécessaire)" allow="fullscreen" allowfullscreen></iframe></div>
     <p class="small" id="plan-note">Plan interactif officiel de la station · Internet nécessaire. Pour vous situer avec le GPS, utilisez l’onglet Carte.</p>
   </div>
+  <div class="card remontee" id="ski-remontee" hidden></div>
   <p class="small" style="margin:0 0 14px"><a href="#infos" data-goto-passe>Ma passe de ski : photo et numéro de série →</a></p>
   <div class="sumgrid" id="st-sum"></div>
   <div class="controls">
@@ -1026,6 +1039,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <p class="alert" id="st-alert" hidden></p>
   <ul class="list" id="st-list"></ul>
+
+  <div class="card" id="neige" style="margin-top:18px">
+    <h3>Neige et avalanches</h3>
+    <div id="neige-pts"></div>
+    <p class="small" id="neige-note">Estimations du modèle météo <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> pour l’altitude indiquée; les hauteurs mesurées par la station peuvent différer. <a href="https://tyrol.com/travel-service/snow-depths/snow-depths-in-soelden" target="_blank" rel="noopener">Hauteurs mesurées ↗</a></p>
+    <div class="aval">
+      <p><b>Risque d’avalanche</b> : consultez chaque matin le bulletin officiel du Tyrol, surtout avant de sortir des pistes balisées.</p>
+      <p class="small">Échelle européenne : 1 faible · 2 limité · 3 marqué · 4 fort · 5 très fort. Sur les pistes ouvertes, la station assure la sécurité; le bulletin concerne surtout le hors-piste.</p>
+      <p><a class="btn light" href="https://avalanche.report" target="_blank" rel="noopener">Bulletin d’avalanche officiel ↗</a></p>
+    </div>
+  </div>
 
   <p class="overline" style="margin-top:22px">Pour notre niveau · <span id="niveau">intermédiaire</span></p>
   <div class="card"><ul class="ul" id="infos-ski"></ul></div>
@@ -1048,7 +1072,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <button type="button" id="m-me">Ma position</button>
     <button type="button" class="light" id="m-hotel">Hôtel</button>
     <a class="btn light" id="m-route" target="_blank" rel="noopener">Itinéraire vers l’hôtel ↗</a>
+    <button type="button" class="light" data-share-pos="carte">Partager ma position</button>
   </div>
+  <div class="share-panel" id="share-panel-carte" hidden></div>
   <p class="gps-info" id="gps-info" role="status" aria-live="polite">Touchez « Ma position » pour vous situer sur les pistes.</p>
   <div class="mapbox"><div id="map" role="application" aria-label="Carte du domaine avec l’hôtel et votre position"></div></div>
   <p class="small">Fond OpenStreetMap, pistes OpenSnowMap. Le GPS fonctionne sans réseau; le fond de carte s’affiche hors ligne seulement pour les zones déjà vues. <a href="https://maps.oetztal.com/panorama/en/S%C3%B6lden%20Winterpanorama/2d/pano_soelden/default/-1/-1/-1/26360,26361/-1/" target="_blank" rel="noopener">Plan officiel des pistes ↗</a></p>
@@ -1072,9 +1098,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p class="small" id="passe-msg" role="status"></p>
     <p class="small">Perte ou vol : présentez-vous à une caisse des remontées avec ce numéro et une pièce d’identité. Les frais de remplacement sont ceux de la station.</p>
   </div>
+  <div class="card" id="perso">
+    <h3>Mes infos</h3>
+    <p class="small">Gardées sur ce téléphone seulement, jamais envoyées. Enregistrées dès que vous tapez.</p>
+    <div class="perso-grid">
+      <label>Casier au dépôt de skis<input data-perso="casier" autocomplete="off" placeholder="ex. Giggijoch, casier 214"></label>
+      <label>Location d’équipement<input data-perso="location" autocomplete="off" placeholder="Magasin, no de contrat"></label>
+      <label>Numéro de chambre<input data-perso="chambre" autocomplete="off" inputmode="numeric"></label>
+      <label>Notes<textarea data-perso="notes" rows="3" placeholder="Taille des bottes, code du cadenas…"></textarea></label>
+    </div>
+  </div>
   <div class="card"><h3>Installer ou partager l’app</h3><p>Page avec le code QR et les étapes pour iPhone et Android, à envoyer aux autres voyageurs.</p><p><a class="btn light" href="installer.html">Comment installer l’app</a></p></div>
   <div class="card">
     <h3>Urgences en Autriche</h3>
+    <div class="sharepos"><button type="button" data-share-pos="infos">Partager ma position</button><span class="small">Envoyez vos coordonnées GPS par WhatsApp ou texto.</span></div>
+    <div class="share-panel" id="share-panel-infos" hidden></div>
     <div class="tel"><span><b>Urgence générale</b><br><span class="small">Numéro européen, depuis tout téléphone</span></span><a href="tel:112">112</a></div>
     <div class="tel"><span><b>Ambulance</b></span><a href="tel:144">144</a></div>
     <div class="tel"><span><b>Secours en montagne</b><br><span class="small">Bergrettung</span></span><a href="tel:140">140</a></div>
@@ -1126,7 +1164,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <p style="margin-top:10px"><button type="button" class="light" id="wipe">Effacer mes données de cet appareil</button></p>
     <p class="small" id="wipe-msg"></p>
   </div>
-  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 18:57</span></p>
+  <p class="foot">Sölden 2027 · app du voyage · <a href="#accueil">retour à l’accueil</a><br><span class="small">Version de l’app : 2026-11-05 19:12</span></p>
 </section>
 </main>
 
@@ -1282,7 +1320,7 @@ function renderHeader(){
 }
 
 /* ---------- Rendu : accueil ---------- */
-function renderHome(){if(LOCKED||!valid(V))return;
+function renderHome(){if(LOCKED||!valid(V))return;try{renderRemontee();renderSondage();}catch(e){}
   const n=NOW(),{start,end}=tripBounds();const ti=todayIndex();
   let html;
   if(n<start){
@@ -1350,7 +1388,7 @@ const domLabel=()=>domSel==='both'?'Sölden et Gurgl':DOMS[domSel].nom;
 function renderDomSeg(){
   $$('[data-dom-seg]').forEach(el=>{el.innerHTML=[['soelden','Sölden'],['gurgl','Gurgl'],['both','Les deux']].map(([k,l])=>`<button type="button" data-dom="${k}" aria-pressed="${domSel===k}">${l}</button>`).join('');});
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-dom]');if(!b)return;domSel=b.dataset.dom;store.set(DOM_KEY,domSel);renderDomSeg();renderSkiStatic();renderEtat();renderWx();renderPlan(current==='ski');if(map&&!last)map.fitBounds(domBounds());});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-dom]');if(!b)return;domSel=b.dataset.dom;store.set(DOM_KEY,domSel);renderDomSeg();renderSkiStatic();renderEtat();renderWx();renderRemontee();renderPlan(current==='ski');if(map&&!last)map.fitBounds(domBounds());});
 function domBounds(){const bs=domAreas().map(a=>DOMS[a].bounds);return[[Math.min(...bs.map(x=>x[0][0])),Math.min(...bs.map(x=>x[0][1]))],[Math.max(...bs.map(x=>x[1][0])),Math.max(...bs.map(x=>x[1][1]))]];}
 
 /* ---------- Ski : pistes et restaurants ---------- */
@@ -1426,6 +1464,73 @@ function zoomPasse(){const p=store.get(PASSE_KEY,{})||{};if(!p.photo)return;cons
 $('#passe-big').addEventListener('click',zoomPasse);$('#passe-photo').addEventListener('click',zoomPasse);
 document.addEventListener('click',e=>{if(e.target.closest('[data-goto-passe]'))setTimeout(()=>$('#passe').scrollIntoView({behavior:'smooth',block:'start'}),80);});
 renderPasse();
+
+/* ---------- Neige (estimations Open-Meteo) ---------- */
+function renderNeige(){
+  const box=$('#neige-pts');if(!box)return;
+  if(!wx){box.innerHTML='<p class="small">Données de neige indisponibles pour le moment.</p>';return;}
+  const n=NOW();const nowKey=dayKey(n,'Europe/Vienna')+'T'+new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Vienna',hour:'2-digit',hourCycle:'h23'}).format(n).slice(0,2);
+  const pts=wx.points.map((p,i)=>({...p,i})).filter(p=>domAreas().includes(p.domaine));const both=domSel==='both';
+  box.innerHTML=pts.map(p=>{const d=wx.data[p.i]||{},h=d.hourly||{},dy=d.daily||{};
+    let hi=(h.time||[]).findIndex(t=>t.slice(0,13)>=nowKey);if(hi<0)hi=0;
+    const dep=h.snow_depth?.[hi];const ti=(dy.time||[]).indexOf(dayKey(n,'Europe/Vienna'));const t0=ti>=0?ti:0;
+    const sf=dy.snowfall_sum||[];const today=sf[t0]||0,next3=sf.slice(t0+1,t0+4).reduce((a,b)=>a+(b||0),0);
+    return`<div class="neige-pt"><span>${both&&DOMS[p.domaine]?esc(DOMS[p.domaine].nom)+' · ':''}${esc(p.nom)}${p.altitude?` <span class="small">${esc(p.altitude.toLocaleString('fr-CA'))} m</span>`:''}<br><b>${dep!=null?Math.round(dep*100)+' cm':'—'}</b> <span class="small">de neige au sol</span></span><span class="small">Neige prévue<br>aujourd’hui <b>${Math.round(today)} cm</b><br>3 jours suivants <b>${Math.round(next3)} cm</b></span></div>`;}).join('')||'<p class="small">Aucun point météo pour ce domaine.</p>';
+}
+
+/* ---------- Dernière remontée ---------- */
+const hmNow=tz=>{const p=new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(NOW()).split(':');return +p[0]*60+ +p[1];};
+const hmTxt=m=>Math.floor(m/60)+' h '+String(m%60).padStart(2,'0');
+function renderRemontee(){
+  if(LOCKED||!valid(V))return;
+  const list=(Array.isArray(V.derniereRemontee)?V.derniereRemontee:[]).filter(r=>/^\d\d:\d\d$/.test(r.heure||'')&&domAreas().includes(r.domaine||'soelden'));
+  const n=NOW(),{start,end}=tripBounds();const inTrip=n>=start&&n<=end;
+  const now=hmNow('Europe/Vienna');const both=domSel==='both';
+  let soon=false;
+  const rows=list.map(r=>{const [h,m]=r.heure.split(':').map(Number),t=h*60+m,left=t-now;
+    let st='';if(inTrip&&now>=12*60&&left>0){st=left<60?'dans '+left+' min':'dans '+hmTxt(left);if(left<=45)soon=true;}else if(inTrip&&left<=0&&left>-60)st='heure passée';
+    return {r,t,left,st};});
+  const html=rows.map(({r,st})=>`<p class="overline">Dernière remontée${both&&DOMS[r.domaine]?' · '+esc(DOMS[r.domaine].nom):''}</p><div class="when">${esc(r.heure.replace(':',' h '))}${st?` <span class="small" style="font-weight:600">· ${esc(st)}</span>`:''}</div>${r.texte?`<p class="small">${esc(r.texte)}</p>`:''}`).join('');
+  const sk=$('#ski-remontee');sk.hidden=!rows.length;sk.innerHTML=html;sk.classList.toggle('soon',soon);
+  const hm=$('#home-remontee');const showHome=rows.some(x=>x.st&&x.st!=='heure passée');
+  hm.hidden=!showHome;hm.innerHTML=showHome?html:'';hm.classList.toggle('soon',soon);
+}
+setInterval(()=>{if(!document.hidden)renderRemontee();},60e3);
+
+/* ---------- Sondage de fin de voyage ---------- */
+function renderSondage(){
+  const el=$('#home-sondage');const s0=V.sondage;
+  if(!s0||!/^https?:\/\//.test(s0.lien||'')){el.hidden=true;return;}
+  const n=NOW(),{end}=tripBounds();const from=s0.date?zoned(s0.date,'12:00','Europe/Vienna'):zoned(V.fin,'08:00','Europe/Vienna');
+  const show=n>=from&&n<=new Date(end.getTime()+30*864e5);
+  el.hidden=!show;if(!show)return;
+  el.innerHTML=`<h3>${esc(s0.titre||'Votre avis sur le voyage')}</h3><p>${esc(s0.texte||'Quelques minutes pour nous dire ce qui vous a plu et ce qu’on peut améliorer. Merci!')}</p><p><a class="btn" href="${esc(s0.lien)}" target="_blank" rel="noopener">Répondre au sondage ↗</a></p>`;
+}
+
+/* ---------- Partager ma position ---------- */
+function posText(lat,lng,acc,alt){
+  const t=new Intl.DateTimeFormat('fr-CA',{hour:'2-digit',minute:'2-digit'}).format(new Date());
+  return `Ma position (${V.titre||'voyage'}) à ${t} : https://maps.google.com/?q=${lat.toFixed(5)},${lng.toFixed(5)} · précision ± ${Math.round(acc)} m${alt!=null?' · altitude ≈ '+Math.round(alt)+' m':''}`;
+}
+function sharePanel(panel,p){
+  const {latitude:a,longitude:b,accuracy:acc,altitude:alt}=p.coords;const txt=posText(a,b,acc,alt);const enc=encodeURIComponent(txt);
+  panel.hidden=false;
+  panel.innerHTML=`<div class="coords">${a.toFixed(5)}, ${b.toFixed(5)}</div><p class="small">Précision ± ${Math.round(acc)} m${alt!=null?' · altitude ≈ '+Math.round(alt).toLocaleString('fr-CA')+' m':''}. En cas d’urgence, appelez le 112 et lisez ces coordonnées.</p>
+  <div class="row">${navigator.share?'<button type="button" data-sp="share">Partager…</button>':''}<a class="btn light" href="https://wa.me/?text=${enc}" target="_blank" rel="noopener">WhatsApp</a><a class="btn light" href="sms:?&body=${enc}">Texto</a><button type="button" class="light" data-sp="copy">Copier</button></div>`;
+  panel.querySelector('[data-sp="share"]')?.addEventListener('click',()=>navigator.share({text:txt}).catch(()=>{}));
+  panel.querySelector('[data-sp="copy"]').addEventListener('click',e=>{navigator.clipboard?.writeText(txt).then(()=>{e.target.textContent='Copié';setTimeout(()=>e.target.textContent='Copier',2000);});});
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-share-pos]');if(!b)return;
+  const panel=$('#share-panel-'+b.dataset.sharePos);panel.hidden=false;
+  if(!('geolocation' in navigator)){panel.innerHTML='<p class="small">Cet appareil ne fournit pas la géolocalisation.</p>';return;}
+  panel.innerHTML='<p class="small">Recherche de votre position… (à l’extérieur, le GPS répond plus vite)</p>';
+  navigator.geolocation.getCurrentPosition(p=>sharePanel(panel,p),err=>{panel.innerHTML='<p class="small">'+({1:'Accès à la position refusé. Autorisez la localisation pour cette app dans les réglages du téléphone.',2:'Position indisponible. Vérifiez que la localisation est activée.',3:'Le GPS tarde à répondre. Réessayez à l’extérieur.'}[err.code]||'Erreur de localisation.')+'</p>';},{enableHighAccuracy:true,timeout:25000,maximumAge:30000});
+});
+
+/* ---------- Mes infos (sur l’appareil seulement) ---------- */
+const PERSO_KEY='solden-voyage-2027-perso-v1';
+(function(){const p=store.get(PERSO_KEY,{})||{};$$('[data-perso]').forEach(el=>{el.value=p[el.dataset.perso]||'';el.addEventListener('input',()=>{const q=store.get(PERSO_KEY,{})||{};q[el.dataset.perso]=el.value;store.set(PERSO_KEY,q);});});})();
 
 /* ---------- Bonnes adresses ---------- */
 const AD_CATS=[['restaurant','Restaurants sur les pistes'],['apres-ski','Après-ski et bars'],['pratique','Pratique']];
@@ -1523,7 +1628,7 @@ async function loadWx(){
   const pts=wxPoints();
   const q=new URLSearchParams({latitude:pts.map(p=>p.lat).join(','),longitude:pts.map(p=>p.lng).join(','),elevation:pts.map(p=>p.altitude??'nan').join(','),
     current:'temperature_2m,apparent_temperature,weather_code,is_day,wind_speed_10m,wind_gusts_10m,precipitation,snowfall',
-    hourly:'temperature_2m,weather_code,is_day,precipitation_probability,snowfall,freezing_level_height,wind_speed_10m',
+    hourly:'temperature_2m,weather_code,is_day,precipitation_probability,snowfall,freezing_level_height,wind_speed_10m,snow_depth',
     daily:'weather_code,temperature_2m_max,temperature_2m_min,snowfall_sum,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,uv_index_max,sunrise,sunset',
     timezone:'Europe/Vienna',forecast_days:'7'});
   const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),12000);
@@ -1542,7 +1647,7 @@ function renderCams(){
   $('#cams').innerHTML=list.map(c=>`<a class="cam" href="${esc(c.lien)}" target="_blank" rel="noopener"><div class="im${c.image?'':' err'}">${c.image?`<img src="${esc(src(c.image))}" alt="Webcam ${esc(c.nom)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('err')">`:''}</div><div class="cap"><b>${both&&DOMS[c.domaine]?esc(DOMS[c.domaine].nom)+' · ':''}${esc(c.nom)}</b>${c.altitude?`<small>${esc(c.altitude.toLocaleString('fr-CA'))} m</small>`:''}</div></a>`).join('');
 }
 function renderWx(){
-  renderCams();
+  renderCams();renderNeige();
   const pts=(wx?.points||wxPoints()).map((p,i)=>({nom:p.nom,altitude:p.altitude,domaine:p.domaine||'soelden',i}));
   const vis=pts.filter(p=>domAreas().includes(p.domaine));const shown=vis.length?vis:pts;
   if(!shown.some(p=>p.i===wxPoint))wxPoint=shown[0].i;
@@ -1660,7 +1765,7 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-goto-bag]'))set
 let wipeArmed=false;
 $('#wipe').addEventListener('click',async()=>{
   const b=$('#wipe');
-  if(!wipeArmed){wipeArmed=true;b.textContent='Touchez encore pour confirmer';$('#wipe-msg').textContent='Les cases cochées, le domaine choisi, la photo de la passe, la phrase du voyage et les copies hors ligne seront effacés. L’app restera installée.';setTimeout(()=>{if(wipeArmed){wipeArmed=false;b.textContent='Effacer mes données de cet appareil';$('#wipe-msg').textContent='';}},6000);return;}
+  if(!wipeArmed){wipeArmed=true;b.textContent='Touchez encore pour confirmer';$('#wipe-msg').textContent='Les cases cochées, le domaine choisi, la photo de la passe, vos infos, la phrase du voyage et les copies hors ligne seront effacés. L’app restera installée.';setTimeout(()=>{if(wipeArmed){wipeArmed=false;b.textContent='Effacer mes données de cet appareil';$('#wipe-msg').textContent='';}},6000);return;}
   wipeArmed=false;
   try{Object.keys(localStorage).filter(k=>k.startsWith('solden-voyage-2027-')).forEach(k=>localStorage.removeItem(k));}catch(e){}
   try{if(window.caches){for(const k of await caches.keys()){const c=await caches.open(k);for(const r of await c.keys()){if(!r.url.startsWith(location.origin))await c.delete(r);}}}}catch(e){}
@@ -1676,7 +1781,7 @@ function show(tab){
   $$('.view').forEach(v=>v.hidden=v.id!=='v-'+tab);
   $$('nav.tabs a').forEach(a=>{if(a.dataset.tab===tab)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   if(tab==='carte'){initMap();setTimeout(()=>map&&map.invalidateSize(),30);}else stopGps();
-  if(tab==='ski')renderPlan(true);
+  if(tab==='ski'){renderPlan(true);renderRemontee();if(!wx||Date.now()-wx.fetched>30*60e3||!(wx.data?.[0]?.hourly?.snow_depth))loadWx();else renderNeige();}
   if(tab==='ski'&&(Date.now()-etatFetched()>5*60e3||Object.keys(etatLive).length<2))loadEtat();
   if(tab==='meteo')renderCams();
   if(tab==='meteo'&&(!wx||wx.sig!==wxSig(wxPoints())||Date.now()-wx.fetched>30*60e3||!wxLive))loadWx();
@@ -1684,7 +1789,7 @@ function show(tab){
   window.scrollTo({top:0});
 }
 addEventListener('hashchange',()=>show(location.hash.slice(1)));
-function renderAll(){if(LOCKED)return;renderDomSeg();renderHeader();renderHome();renderProgram();renderSkiStatic();renderEtat();renderWx();renderInfos();placeMarkers();}
+function renderAll(){if(LOCKED)return;try{renderRemontee();renderSondage();}catch(e){}renderDomSeg();renderHeader();renderHome();renderProgram();renderSkiStatic();renderEtat();renderWx();renderInfos();placeMarkers();}
 
 boot();
 show(location.hash.slice(1)||'accueil');
